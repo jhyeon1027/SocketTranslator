@@ -3,43 +3,38 @@ import java.net.Socket;
 import javax.swing.*;
 
 public class Client {
-    private static Socket socket;
-    private static PrintWriter out;
-    public static void main(String[] args) {
-        final String SERVER_IP = "localhost";
-        final int SERVER_PORT = 7777;
 
+    public static void main (String args[]){
+        SwingUtilities.invokeLater(() -> {
+            Mainpage mainpage = new Mainpage();
+            mainpage.openMainpage();
+        });
+    }
+
+    private final String SERVER_IP;
+    private final int SERVER_PORT;
+    private Socket socket;
+    private PrintWriter out;
+
+    public Client(String SERVER_IP, int SERVER_PORT) {
+        this.SERVER_IP = SERVER_IP;
+        this.SERVER_PORT = SERVER_PORT;
+    }
+
+    public void connectToServer() {
         try {
-            // 서버에 연결
-            Socket socket = new Socket(SERVER_IP, SERVER_PORT);
-
-            // 클라이언트와 통신하기 위한 입출력 스트림 설정
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-
-            // 서버로 메시지 전송
-            out.println("안녕하세요, 서버!");
-
-            // 서버로부터 응답 수신
-            String serverResponse = in.readLine();
-            System.out.println("서버로부터 수신한 응답: " + serverResponse);
-
-            SwingUtilities.invokeLater(() -> {
-                Mainpage mainpage = new Mainpage();
-                mainpage.openMainpage();
-            });
-
-
+            this.socket = new Socket(SERVER_IP, SERVER_PORT);
+            // 서버와의 연결이 성립된 후에 PrintWriter 객체를 초기화
+            this.out = new PrintWriter(socket.getOutputStream(), true);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    public static Socket getSocket() {
-        return socket;
-    }
 
-    public static PrintWriter getOut() {
-        return out;
+    public void sendToServer(String message) {
+        // 메시지 전송 메서드
+        if(out != null){
+            out.println(message);
+        }
     }
-
 }

@@ -23,7 +23,8 @@ public class Chat extends JFrame {
 
     public Chat() {
         this.username = JOptionPane.showInputDialog("사용자 이름을 입력하세요 :");
-        this.writer = Client.getOut();
+        this.client = new Client("localhost", 7777); // 예시로 localhost와 7777 포트를 사용
+        this.client.connectToServer();
         sendUsername();
         createChatUI();
     }
@@ -84,7 +85,7 @@ public class Chat extends JFrame {
     }
 
     public void sendUsername() {
-        writer.println("USERNAME:"+username);
+        client.sendToServer("USERNAME:" + username);
     }
 
     /*public void setUpNetworking(Socket sock) {
