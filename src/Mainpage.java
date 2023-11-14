@@ -7,8 +7,7 @@ import java.net.*;
 
 public class Mainpage {
     private static Chat chatInstance; //Chat 클래스의 인스턴스를 저장하는 필드
-
-    public void openMainpage(){
+    public void openMainpage() {
         JFrame f = new JFrame("My Program"); // JFrame 객체를 생성한다.
         f.setResizable(false); // 윈도우의 크기 조정을 불가능하게 한다.
         JButton b1 = new JButton("텍스트 번역"); // JButton 객체를 생성한다.
@@ -54,24 +53,24 @@ public class Mainpage {
         });*/
 
         // b3 버튼에 액션 리스너를 추가한다.
-       b3.addActionListener(new ActionListener() {
+        b3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // b3 버튼이 클릭되면 Chat 클래스를 실행한다.
-                if (chatInstance == null) { //채팅방을 실행중이지 않다면
+                if (chatInstance == null || chatInstance.isSocketClosed()) { // 채팅방을 실행중이지 않거나 소켓이 닫혔으면
                     chatInstance = new Chat();
+
+                    String username = JOptionPane.showInputDialog("사용자 이름을 입력하세요 :");
+                    chatInstance.setUsername(username);
+                    chatInstance.connectToServer();
                 } else {
                     chatInstance.setVisible(true);
                 }
             }
         });
-    }
 
 
-    //private static Client chatInstance; //Chat 클래스의 인스턴스를 저장하는 필드
-
-    public static void main(String[] args) {
-
+        //private static Client chatInstance; //Chat 클래스의 인스턴스를 저장하는 필드
 
     }
 }

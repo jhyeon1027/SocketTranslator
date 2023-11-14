@@ -1,63 +1,100 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Server {
-
+    private static List<OutputStream> clientOutputStreams = new ArrayList<>();
     private static List<String> connectedUsers = new ArrayList<>(); // 연결된 클라이언트들의 사용자 이름을 저장하는 리스트
+    private final int SERVER_PORT;
 
-    // 연결된 클라이언트들의 출력 스트림(username)을 저장하는 리스트
-    private String getUserListMessage() {
-        return "[Server] Users: " + String.join(", ", connectedUsers);
+    public Server(int SERVER_PORT) {
+        this.SERVER_PORT = SERVER_PORT;
     }
-    public static void main(String[] args) {
-        final int PORT = 7777;
 
+    public void startServer() {
         try {
-            // 서버 소켓 생성
-            ServerSocket ss = new ServerSocket(PORT);
-            System.out.println("서버가 " + PORT + " 포트에서 대기 중...");
+            ServerSocket ss = new ServerSocket(SERVER_PORT);
+            System.out.println("서버가 " + SERVER_PORT + " 포트에서 대기 중...");
 
             while (true) {
-                // 클라이언트 연결을 기다림
                 Socket s = ss.accept();
-                System.out.println("클라이언트가 연결되었습니다.");
+                new Thread(() -> {
+                    try {
+                        System.out.println("클라이언트가 연결되었습니다.");
 
-                // 클라이언트와 통신하기 위한 입출력 스트림 설정
-                BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
-                PrintWriter out = new PrintWriter(s.getOutputStream(), true);
+                        InputStream in = s.getInputStream();
+                        OutputStream out = s.getOutputStream();
+                        clientOutputStreams.add(out);
 
-                // 클라이언트로부터 메시지 수신 및 응답
-                String clientMessage = in.readLine();
-                System.out.println("클라이언트로부터 수신한 메시지: " + clientMessage);
-                // 수신한 메시지가 "USERNAME:"으로 시작하면 사용자 이름으로 처리
-                if (clientMessage.startsWith("USERNAME:")) {
-                    String username = clientMessage.substring(9); // "USERNAME:" 다음에 오는 문자열을 사용자 이름으로 간주
-                    connectedUsers.add(username);
-                    System.out.println("Connected users: " + connectedUsers);
-                }
-                // 클라이언트에게 응답 전송
-                out.println("서버가 메시지를 수신했습니다.");
+                        byte[] buffer = new byte[1024];
+                        int bytesReceived;
+                        while ((bytesReceived = in.read(buffer)) != -1) {
+                            String clientMessage = new String(buffer, 0, bytesReceived, StandardCharsets.UTF_8);
+                            System.out.println("클라이언트로부터 수신한 메시지: " + clientMessage);
 
+                            if (clientMessage.startsWith("USERNAME:")) {
+                                String username = clientMessage.substring(9);
+                                connectedUsers.add(username);
+                                //사용자 명단 업데이트
+                                String userListMessage = "USERLIST:" + String.join(",", connectedUsers);
+                                tellEveryone(userListMessage, out);
+                                try {
+                                    Thread.sleep(200); // 200 밀리초 대기. 같이 전해지는 오류때문에
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                System.out.println("Connected users: " + connectedUsers);
+                                // 클라이언트가 연결되었다는 메시지를 모든 클라이언트에게 전송
+                                String connectionMessage = "[" + username + "님이 입장하였습니다.]";
+                                tellEveryone(connectionMessage, out);
+                            } else if (clientMessage.startsWith("EXIT:")) {
+                                String username = clientMessage.substring(5);
+                                connectedUsers.remove(username);
+                                clientOutputStreams.remove(out);
+                                //사용자 명단 업데이트
+                                String userListMessage = "USERLIST:" + String.join(",", connectedUsers);
+                                tellEveryone(userListMessage, out);
 
+                                System.out.println("User exited: " + username);
+                                System.out.println("Connected users: " + connectedUsers);
+                                // 클라이언트가 연결 해제 되었다는 메시지를 모든 클라이언트에게 전송
+                                String connectionMessage = "[" + username + "님이 퇴장하였습니다.]";
+                                tellEveryone(connectionMessage, out);
+                                break;
+                            } else {
+                                tellEveryone(clientMessage, out);
+                            }
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    public static void receiveUsername(BufferedReader in) {
-        try {
-            String username = in.readLine();
-            connectedUsers.add(username);
-            System.out.println("Connected users: " + connectedUsers);
-        } catch (IOException e) {
-            e.printStackTrace();
+    //서버가 메시지를 받았을 때 모든 클라이언트에게 전송하는 메서드..
+    public static void tellEveryone(String message, OutputStream sender) {
+        System.out.println("Sending message: " + message);
+        byte[] messageBytes = message.getBytes(StandardCharsets.UTF_8);
+        for (OutputStream out : clientOutputStreams) {
+            try {
+                out.write(messageBytes);
+                out.flush();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
         }
+        System.out.println("Message sent: " + message);
     }
 
+    public static void main(String[] args) {
+        Server server = new Server(7777);
+        server.startServer();
+    }
 }

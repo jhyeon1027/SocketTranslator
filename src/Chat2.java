@@ -12,7 +12,7 @@ import java.net.SocketException;
 
 import java.net.Socket;
 
-public class Chat extends JFrame {
+public class Chat2 extends JFrame {
     private JTextArea chatArea;
     private JTextField messageField;
     private JButton sendButton;
@@ -24,9 +24,14 @@ public class Chat extends JFrame {
 
     private Client client;
     private String username;
-
-    public Chat() {
+    public static void main(String[] args){
+        Chat2 chat = new Chat2();
+    }
+    public Chat2() {
         createChatUI();
+        String username = JOptionPane.showInputDialog("사용자 이름을 입력하세요 :");
+        setUsername(username);
+        connectToServer();
 
     }
     public boolean isSocketClosed() {
@@ -186,7 +191,64 @@ public class Chat extends JFrame {
         userList.setModel(model);
     }
 
+    /*public class IncomingReader implements Runnable {
+        public void run() {
+            try {
+                InputStream in = client.getSocket().getInputStream();
+                byte[] buffer = new byte[1024];
+                int bytesReceived;
+                while ((bytesReceived = in.read(buffer)) != -1) {
+                    String line = new String(buffer, 0, bytesReceived, StandardCharsets.UTF_8);
+                    if (line.startsWith("[Server] Users: ")) {
+                        String[] users = line.substring("[Server] Users: ".length()).split(", ");
+                        SwingUtilities.invokeLater(() -> updateUserList(users));
+                    } else {
+                        String finalLine = line;
+                        if (TranslationCheckbox.isSelected() && !finalLine.startsWith("[" + username + "]")) {
+                            String message = finalLine.substring(finalLine.indexOf("] ") + 2);
+                            String sourceLanguage = nTranslator.detectLanguage(message);
+                            String targetLanguage = (String) languageComboBox.getSelectedItem();
+                            String translatedMessage = nTranslator.translateText(message, sourceLanguage, targetLanguage);
+                            finalLine = finalLine.substring(0, finalLine.indexOf("] ") + 2) + translatedMessage;
+                        }
+                        final String finalLineForLambda = finalLine;
+                        SwingUtilities.invokeLater(() -> chatArea.append(finalLineForLambda + "
+                                "));
+                    }
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }*/
 
+    /*public class IncomingReader implements Runnable {
+        public void run() {
+            try {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    if (line.startsWith("[Server] Users: ")) {
+                        String[] users = line.substring("[Server] Users: ".length()).split(", ");
+                        SwingUtilities.invokeLater(() -> updateUserList(users));
+                    } else {
+                        String finalLine = line;
+                        if (TranslationCheckbox.isSelected() && !finalLine.startsWith("[" + username + "]")) {
+                            String message = finalLine.substring(finalLine.indexOf("] ") + 2);
+                            String sourceLanguage = nTranslator.detectLanguage(message);
+                            String targetLanguage = (String) languageComboBox.getSelectedItem();
+                            String translatedMessage = nTranslator.translateText(message, sourceLanguage, targetLanguage);
+                            finalLine = finalLine.substring(0, finalLine.indexOf("] ") + 2) + translatedMessage;
+                        }
+                        final String finalLineForLambda = finalLine;
+                        SwingUtilities.invokeLater(() -> chatArea.append(finalLineForLambda + " \n"));
+                    }
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }*/
 
     /*private void updateUserList(String[] users) {
         DefaultListModel<String> model = new DefaultListModel<>();
