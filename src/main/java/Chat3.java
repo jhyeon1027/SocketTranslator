@@ -1,4 +1,6 @@
-import  javax.swing.*;
+import org.json.simple.JSONObject;
+
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,13 +11,10 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.net.SocketException;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import java.net.Socket;
 
-public class Chat extends JFrame {
+public class Chat3 extends JFrame {
     private JTextArea chatArea;
     private JTextField messageField;
     private JButton sendButton;
@@ -28,10 +27,16 @@ public class Chat extends JFrame {
     private Client client;
     private String username;
     private NTranslator nTranslator;
-
-    public Chat() {
+    public static void main(String[] args){
+        Chat2 chat = new Chat2();
+    }
+    public Chat3() {
         this.nTranslator = new NTranslator();
         createChatUI();
+        String username = JOptionPane.showInputDialog("사용자 이름을 입력하세요 :");
+        setUsername(username);
+        connectToServer();
+
     }
     public boolean isSocketClosed() {
         return client.getSocket().isClosed();
@@ -43,7 +48,7 @@ public class Chat extends JFrame {
         this.client = new Client("localhost", 7777); // 예시로 localhost와 7777 포트를 사용
         this.client.connectToServer();
         sendUsername();
-        Thread thread = new Thread(new IncomingReader());
+        Thread thread = new Thread(new Chat3.IncomingReader());
         thread.start();
     }
     public void disconnectFromServer() {
@@ -64,7 +69,7 @@ public class Chat extends JFrame {
         messageField = new JTextField(); // 메시지를 입력할 수 있는 박스
 
         sendButton = new JButton("전송"); // 메시지를 전송하는 버튼
-        sendButton.addActionListener(new SendButtonListener());
+        sendButton.addActionListener(new Chat3.SendButtonListener());
 
         messageField.addActionListener(new ActionListener() { //엔터키로 메시지를 보낼 수 있도록
             @Override
@@ -85,7 +90,7 @@ public class Chat extends JFrame {
         TranslationCheckbox.setBounds(320, 220, 100, 20);
 
         exitButton = new JButton("나가기"); // 채팅방을 종료하는 나가기 버튼
-        exitButton.addActionListener(new ExitButtonListener());
+        exitButton.addActionListener(new Chat3.ExitButtonListener());
 
         setLayout(null);
 
@@ -212,6 +217,5 @@ public class Chat extends JFrame {
         }
         userList.setModel(model);
     }
-
 
 }

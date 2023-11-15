@@ -4,11 +4,18 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+
 
 public class Server {
     private static List<OutputStream> clientOutputStreams = new ArrayList<>();
     private static List<String> connectedUsers = new ArrayList<>(); // 연결된 클라이언트들의 사용자 이름을 저장하는 리스트
     private final int SERVER_PORT;
+
+    NTranslator translator = new NTranslator(); // NTranslator 객체 생성
 
     public Server(int SERVER_PORT) {
         this.SERVER_PORT = SERVER_PORT;
@@ -64,7 +71,47 @@ public class Server {
                                 String connectionMessage = "[" + username + "님이 퇴장하였습니다.]";
                                 tellEveryone(connectionMessage, out);
                                 break;
-                            } else {
+                            } else if(clientMessage.startsWith("TransEXIT")){
+                                System.out.println("번역기가 종료되었습니다.");
+                                clientOutputStreams.remove(out);
+                                break;
+                            } else if (clientMessage.startsWith("TRANSLATE:")) {
+                                String jsonMessage = clientMessage.substring(10);
+                                JSONParser parser = new JSONParser();
+                                try {
+                                    JSONObject json = (JSONObject) parser.parse(jsonMessage);
+                                    String inputText = (String) json.get("inputText");
+                                    String sourceLanguage = (String) json.get("sourceLanguage");
+                                    String targetLanguage = (String) json.get("targetLanguage");
+                                    // 이 위에까지가 번역정보. 이 아래부터는 번역기능 구현
+                                    String translatedText = translator.translateText(inputText, sourceLanguage, targetLanguage);
+                                    // 번역 결과를 클라이언트에게 전송
+                                    String responseMessage = /*"TRANSLATE:" +일단없앰*/translatedText;
+                                    byte[] responseMessageBytes = responseMessage.getBytes(StandardCharsets.UTF_8);
+                                    out.write(responseMessageBytes);
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                            } else if(clientMessage.startsWith("LiveTRANSLATE:")){
+                                String jsonMessage = clientMessage.substring(14);
+                                JSONParser parser = new JSONParser();
+                                try {
+                                    JSONObject json = (JSONObject) parser.parse(jsonMessage);
+                                    String username = (String) json.get("Username");
+                                    String inputText = (String) json.get("inputText");
+                                    String sourceLanguage = (String) json.get("sourceLanguage");
+                                    String targetLanguage = (String) json.get("targetLanguage");
+                                    // 이 위에까지가 번역정보. 이 아래부터는 번역기능 구현
+                                    String translatedText = translator.translateText(inputText, sourceLanguage, targetLanguage);
+                                    // 번역 결과를 클라이언트에게 전송
+                                    String responseMessage = "TranslatedText:"+username+": "+translatedText;
+                                    byte[] responseMessageBytes = responseMessage.getBytes(StandardCharsets.UTF_8);
+                                    out.write(responseMessageBytes);
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+
+                            }else {
                                 tellEveryone(clientMessage, out);
                             }
                         }

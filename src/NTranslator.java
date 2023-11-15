@@ -5,13 +5,13 @@ import java.io.*;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
-import java.net.*;
-
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
-import java.nio.charset.StandardCharsets;
+import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,30 +22,58 @@ public class NTranslator extends JFrame {
     private static final String CLIENT_ID = "NqqIry45IjCweWpEX8mJ";
     private static final String CLIENT_SECRET = "99p_Wia1iH";
 
-    private Client client;
-
-    private NTranslatorGUI GUI;
-    public void connectToServer() {
-
-        this.client = new Client("localhost", 7777); // 예시로 localhost와 7777 포트를 사용
-        this.client.connectToServer();
-        this.GUI = new NTranslatorGUI(this, this.client); // NTranslator 인스턴스를 NTranslatorGUI 생성자에 전달
-        System.out.println("번역기 접속확인");
-
-    }
-    public void disconnectFromServer() {
-        String exitMessage="TransEXIT";
-        byte[] exitMessageBytes = exitMessage.getBytes(StandardCharsets.UTF_8);
-        this.client.sendToServer(exitMessageBytes);
-        this.client.disconnectFromServer();
-    }
-
-    public boolean isSocketClosed() {
-        return client.getSocket().isClosed();
-    }
+    // GUI 컴포넌트 선언
+    private JTextArea inputArea; // 입력 창
+    private JTextArea outputArea; // 출력 창
+    private JButton translateButton; // 번역 버튼
+    private JComboBox<String> languageComboBox; // 번역할 언어 소스 선택 콤보박스
 
     public NTranslator() {
+        // JFrame 설정
+        setTitle("텍스트 번역기");
+        setSize(500, 500);
+        setLayout(null);
 
+        // GUI 컴포넌트 초기화
+        this.inputArea = new JTextArea(); // 입력 창
+        inputArea.setLineWrap(true); // 텍스트가 행 너비를 초과하면 자동으로 줄 바꿈
+        inputArea.setBounds(80, 20, 320, 150);
+
+        outputArea = new JTextArea(); // 출력 창
+        outputArea.setLineWrap(true); // 텍스트가 행 너비를 초과하면 자동으로 줄 바꿈
+        JScrollPane outputScrollPane = new JScrollPane(outputArea);
+        outputArea.setBounds(80, 250, 320, 150);
+        outputArea.setEditable(false);
+
+        translateButton = new JButton("번역");
+        translateButton.setBounds(200, 195, 100, 30);
+        translateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // 번역 기능을 구현
+                String inputText = inputArea.getText();
+                String sourceLanguage = detectLanguage(inputText); //언어감지
+                String targetLanguage = (String) languageComboBox.getSelectedItem();
+                System.out.println("원본메시지: " + inputText); //없애도 되는 부분 검수용
+                System.out.println("타겟언어: " + targetLanguage);
+                System.out.println("소스언어: " + sourceLanguage);
+                // 목적언어는 콤보박스 선택
+                // 여기에 실제 번역 로직을 추가해야 합니다.
+                String translatedText = translateText(inputText, sourceLanguage, targetLanguage);
+                // 번역 결과를 outputArea에 표시
+                outputArea.setText("번역 결과: " + translatedText);
+            }
+        });
+
+        // 콤보박스 초기화 및 설정
+        languageComboBox = new JComboBox<>(new String[]{"ko", "en", "ja", "zh-CN", "zh-TW", "vi", "id", "th", "de", "ru", "es", "it", "fr"});
+        languageComboBox.setBounds(80, 195, 100, 30);
+
+        // 컴포넌트를 프레임에 추가
+        add(inputArea);
+        add(outputArea);
+        add(translateButton);
+        add(languageComboBox);
     }
 
     public String detectLanguage(String text) {
@@ -181,9 +209,17 @@ public class NTranslator extends JFrame {
         }
     }
 
+    public void runTranslation() {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                setVisible(true);
+            }
+        });
+    }
 
     public static void main(String[] args) {
-        //NTranslator translator = new NTranslator();
-        //translator.runTranslation();
+        NTranslator translator = new NTranslator();
+        translator.runTranslation();
     }
 }

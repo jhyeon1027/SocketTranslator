@@ -32,6 +32,15 @@ public class Client {
         }
     }
 
+    public void disconnectFromServer() {
+        System.out.println("종료하게요");
+        try {
+            this.socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void sendToServer(byte[] messageBytes) {
         if(out != null){
             try {

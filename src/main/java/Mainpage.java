@@ -32,7 +32,7 @@ public class Mainpage {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // b1 버튼이 클릭되면 NTranslator 클래스를 실행한다.
-                if (translatorInstance == null){ //번역기가 실행중이지 않다면
+                if (translatorInstance == null|| translatorInstance.isSocketClosed()){ //번역기가 실행중이지 않다면
                     translatorInstance = new NTranslator();
                     translatorInstance.connectToServer();
                 }
