@@ -29,5 +29,11 @@
             <version>2.10.1</version> <!-- Gson 라이브러리의 최신 버전을 확인하여 업데이트하세요 -->
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>2.0.30</version>
+        </dependency>
+
     </dependencies>
 </project>

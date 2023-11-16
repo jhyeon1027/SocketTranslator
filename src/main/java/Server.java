@@ -20,6 +20,8 @@ public class Server {
     NTranslator translator = new NTranslator(); // NTranslator 객체 생성
     ImageTranslator imageTranslator = new ImageTranslator(); //  ImageTranslator 객체 생성
 
+    PDFtoImage pdftoImage = new PDFtoImage(); // PDFtoImage 객체 생성
+
     public Server(int SERVER_PORT) {
         this.SERVER_PORT = SERVER_PORT;
     }
@@ -117,6 +119,25 @@ public class Server {
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
+                            }else if(clientMessage.startsWith("PDFTRANSLATE:")){
+                                String jsonMessage = clientMessage.substring(13);
+                                JSONParser parser = new JSONParser();
+                                try{
+                                    JSONObject json = (JSONObject) parser.parse(jsonMessage);
+                                    String base64File = (String) json.get("filename");
+                                    String sourceLanguage = (String) json.get("sourceLanguage");
+                                    String targetLanguage = (String) json.get("targetLanguage");
+
+                                    pdftoImage.translateImage(base64File, sourceLanguage, targetLanguage);
+
+
+                                    //String responseMessage = /*"PDFTRANSLATE:" +일단없앰*/translatedText;
+                                    //byte[] responseMessageBytes = responseMessage.getBytes(StandardCharsets.UTF_8);
+                                    //out.write(responseMessageBytes);
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+
                             }else if(clientMessage.startsWith("LiveTRANSLATE:")){
                                 String jsonMessage = clientMessage.substring(14);
                                 JSONParser parser = new JSONParser();
