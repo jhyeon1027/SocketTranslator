@@ -110,11 +110,8 @@ public class NTranslatorGUI extends JFrame{
 
     public class ExitButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent ev) {
-            try {
-
-                // 서버와의 연결 종료
+            try {  // 서버와의 연결 종료
                 nTranslator.disconnectFromServer();
-
                 dispose();
             } catch (Exception ex) {
                 ex.printStackTrace();

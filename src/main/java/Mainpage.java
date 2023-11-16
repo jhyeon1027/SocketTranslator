@@ -10,6 +10,7 @@ import java.awt.event.WindowEvent;
 public class Mainpage {
     private static Chat chatInstance; //Chat 클래스의 인스턴스를 저장하는 필드
     private static NTranslator translatorInstance;
+    private static ImageTranslator imageInstance;
     public void openMainpage() {
         JFrame f = new JFrame("My Program"); // JFrame 객체를 생성한다.
         f.setResizable(false); // 윈도우의 크기 조정을 불가능하게 한다.
@@ -42,18 +43,19 @@ public class Mainpage {
             }
         });
 
-        /*b2.addActionListener(new ActionListener() {
+        b2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // b2 버튼이 클릭되면 ImageTranslator 클래스를 실행한다.
                 if (imageInstance == null){ //번역기가 실행중이지 않다면
-
+                    imageInstance = new ImageTranslator();
+                    imageInstance.connectToServer();
                 }
                 else{
                     translatorInstance.setVisible(true);
                 }
             }
-        });*/
+        });
 
         // b3 버튼에 액션 리스너를 추가한다.
         b3.addActionListener(new ActionListener() {

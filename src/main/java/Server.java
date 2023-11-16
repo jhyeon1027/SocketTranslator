@@ -4,9 +4,11 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Base64;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import java.nio.file.Files;
 
 
 
@@ -16,6 +18,7 @@ public class Server {
     private final int SERVER_PORT;
 
     NTranslator translator = new NTranslator(); // NTranslator 객체 생성
+    ImageTranslator imageTranslator = new ImageTranslator(); //  ImageTranslator 객체 생성
 
     public Server(int SERVER_PORT) {
         this.SERVER_PORT = SERVER_PORT;
@@ -36,7 +39,7 @@ public class Server {
                         OutputStream out = s.getOutputStream();
                         clientOutputStreams.add(out);
 
-                        byte[] buffer = new byte[1024];
+                        byte[] buffer = new byte[2 * 1024 * 1024];
                         int bytesReceived;
                         while ((bytesReceived = in.read(buffer)) != -1) {
                             String clientMessage = new String(buffer, 0, bytesReceived, StandardCharsets.UTF_8);
@@ -75,7 +78,11 @@ public class Server {
                                 System.out.println("번역기가 종료되었습니다.");
                                 clientOutputStreams.remove(out);
                                 break;
-                            } else if (clientMessage.startsWith("TRANSLATE:")) {
+                            } else if(clientMessage.startsWith("ImageEXIT")){
+                                System.out.println("이미지 번역기가 종료되었습니다.");
+                                clientOutputStreams.remove(out);
+                                break;
+                            }else if (clientMessage.startsWith("TRANSLATE:")) {
                                 String jsonMessage = clientMessage.substring(10);
                                 JSONParser parser = new JSONParser();
                                 try {
@@ -92,7 +99,25 @@ public class Server {
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
-                            } else if(clientMessage.startsWith("LiveTRANSLATE:")){
+                            } else if(clientMessage.startsWith("IMAGETRANSLATE:")){
+                                String jsonMessage = clientMessage.substring(15);
+                                JSONParser parser = new JSONParser();
+                                try{
+                                    JSONObject json = (JSONObject) parser.parse(jsonMessage);
+                                    String base64Image = (String) json.get("image");
+                                    byte[] imageBytes = Base64.getDecoder().decode(base64Image);
+                                    String sourceLanguage = (String) json.get("sourceLanguage");
+                                    String targetLanguage = (String) json.get("targetLanguage");
+                                    File imageFile = File.createTempFile("temp_image", ".jpg");
+                                    Files.write(imageFile.toPath(), imageBytes);
+                                    String translatedText = imageTranslator.translateImage(imageFile, sourceLanguage, targetLanguage);
+                                    String responseMessage = /*"IMAGETRANSLATE:" +일단없앰*/translatedText;
+                                    byte[] responseMessageBytes = responseMessage.getBytes(StandardCharsets.UTF_8);
+                                    out.write(responseMessageBytes);
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                            }else if(clientMessage.startsWith("LiveTRANSLATE:")){
                                 String jsonMessage = clientMessage.substring(14);
                                 JSONParser parser = new JSONParser();
                                 try {
