@@ -176,7 +176,11 @@ public class Chat3 extends JFrame {
 
                     // 다른 사용자가 보낸 메시지만 chatArea에 추가
                     // 서버로부터 받은 메시지가 사용자 명단 업데이트인 경우
-                    if(message.startsWith("TranslatedText:")){
+                    if(message.startsWith("JOIN:")||message.startsWith("eXIT:")){
+                        String joinExit = message.substring(message.indexOf(":")+1);
+                        chatArea.append(joinExit+"\n");
+                    }
+                    else if(message.startsWith("TranslatedText:")){
                         String text = message.substring(message.indexOf(":") + 1);
                         chatArea.append(text + "\n");
                     } else if (message.startsWith("USERLIST:")) {

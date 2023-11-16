@@ -55,7 +55,7 @@ public class Server {
                                 }
                                 System.out.println("Connected users: " + connectedUsers);
                                 // 클라이언트가 연결되었다는 메시지를 모든 클라이언트에게 전송
-                                String connectionMessage = "[" + username + "님이 입장하였습니다.]";
+                                String connectionMessage = "JOIN:"+"["+username + "님이 입장하였습니다.]";
                                 tellEveryone(connectionMessage, out);
                             } else if (clientMessage.startsWith("EXIT:")) {
                                 String username = clientMessage.substring(5);
@@ -68,7 +68,7 @@ public class Server {
                                 System.out.println("User exited: " + username);
                                 System.out.println("Connected users: " + connectedUsers);
                                 // 클라이언트가 연결 해제 되었다는 메시지를 모든 클라이언트에게 전송
-                                String connectionMessage = "[" + username + "님이 퇴장하였습니다.]";
+                                String connectionMessage = "eXIT:"+"[" + username + "님이 퇴장하였습니다.]";
                                 tellEveryone(connectionMessage, out);
                                 break;
                             } else if(clientMessage.startsWith("TransEXIT")){
