@@ -51,7 +51,7 @@ public class Chat extends JFrame {
     }
 
 
-    public void createChatUI() {
+    public void createChatUI() { // GUI부분@@@@
         setTitle("Chat Client");
 
         chatArea = new JTextArea(); // 대화 내용이 보이는 박스

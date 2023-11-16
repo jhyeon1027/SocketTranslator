@@ -11,20 +11,40 @@ public class Mainpage {
     private static Chat chatInstance; //Chat 클래스의 인스턴스를 저장하는 필드
     private static NTranslator translatorInstance;
     public void openMainpage() {
-        JFrame f = new JFrame("My Program"); // JFrame 객체를 생성한다.
+        JFrame f = new JFrame("CATPAGO - 언어 장벽 없이 대화하는 세상을 꿈꿉니다. "); // JFrame 객체를 생성한다.
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        Image img = toolkit.getImage("B:\\Users\\Family\\IdeaProjects2\\src\\main\\java\\CATPAGO_LOGO.png");
+        //@@ 본인 컴퓨터 내 이미지 로고 위치로 변경.
+        f.setIconImage(img);
+
+        ImageIcon imageIcon = new ImageIcon("B:\\Users\\Family\\IdeaProjects2\\src\\main\\java\\CATPAGO_2.png"); // Replace with your image path
+        //@@ 본인 컴퓨터 내 이미지 로고 위치로 변경.
+
+        // Create a JLabel with the imageIcon
+        JLabel imageLabel = new JLabel(imageIcon);
+        imageLabel.setBounds(0, 0, imageIcon.getIconWidth(), imageIcon.getIconHeight()); // Set the bounds according to the image size
+
+        // Add the JLabel to the JFrame
+        f.add(imageLabel);
+
         f.setResizable(false); // 윈도우의 크기 조정을 불가능하게 한다.
         JButton b1 = new JButton("텍스트 번역"); // JButton 객체를 생성한다.
         JButton b2 = new JButton("이미지 번역"); // JButton 객체를 생성한다.
-        JButton b3 = new JButton("채팅방"); // JButton 객체를 생성한다.
-        b1.setBounds(100, 50, 200, 50); // 버튼의 위치와 크기를 설정한다.
-        b2.setBounds(100, 120, 200, 50); // 버튼의 위치와 크기를 설정한다.
-        b3.setBounds(100, 190, 200, 50); // 버튼의 위치와 크기를 설정한다.
+        JButton b3 = new JButton("글로벌 채팅방"); // JButton 객체를 생성한다.
+        JButton b4 = new JButton("임시 버튼"); // JButton 객체를 생성한다.
+
+        b1.setBounds(135, 320, 200, 50); // 버튼의 위치와 크기를 설정한다.
+        b2.setBounds(135, 390, 200, 50); // 버튼의 위치와 크기를 설정한다.
+        b3.setBounds(135, 460, 200, 50); // 버튼의 위치와 크기를 설정한다.
+        b4.setBounds(135, 530, 200, 50); // 버튼의 위치와 크기를 설정한다.
         f.add(b1); // 버튼을 윈도우에 추가한다.
         f.add(b2); // 버튼을 윈도우에 추가한다.
         f.add(b3); // 버튼을 윈도우에 추가한다.
-        f.setSize(400, 400); // 윈도우의 크기를 설정한다.
+        f.add(b4); // 버튼을 윈도우에 추가한다.
+        f.setSize(500, 650); // 윈도우의 크기를 설정한다.
         f.setLayout(null); // 윈도우의 레이아웃을 설정한다.
         f.setVisible(true); // 윈도우의 가시성을 설정한다.
+        // GUI부분@@@@
 
 
         // b1 버튼에 액션 리스너를 추가한다.
