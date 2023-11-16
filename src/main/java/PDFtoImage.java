@@ -98,12 +98,13 @@ public class PDFtoImage {
     public void translateImage(String imageFilePath, String sourceLang, String targetLang) {
         OkHttpClient client = new OkHttpClient().newBuilder().build();
 
+        File imageFile = new File(imageFilePath);
         MediaType mediaType = MediaType.parse("image/jpeg");
         RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
                 .addFormDataPart("source", sourceLang)
                 .addFormDataPart("target", targetLang)
-                .addFormDataPart("image", "image.jpg",
-                        RequestBody.create(mediaType, new File(imageFilePath)))
+                .addFormDataPart("image", imageFile.getName(),
+                        RequestBody.create(mediaType, imageFile))
                 .build();
 
         Request request = new Request.Builder()
