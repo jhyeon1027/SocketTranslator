@@ -14,6 +14,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.awt.Image;
+import java.awt.event.ActionEvent;
 import java.awt.Graphics2D;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -44,7 +45,12 @@ public class PDFtoImage {
         this.client.sendToServer(exitMessageBytes);
         this.client.disconnectFromServer();
     }
-
+    public boolean isSocketClosed() {
+        return client.getSocket().isClosed();
+    }
+    public PDFtoImageGUI getGUI() {
+        return this.GUI;
+    }
 
     public int convert(File pdfFile, String imageFilePrefix) {
         int pageEnd = 0;

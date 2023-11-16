@@ -33,6 +33,7 @@ public class PDFtoImageGUI extends JFrame {
     private JButton exitButton;
     private JComboBox<String> languageComboBox;
     private JLabel SuccessLabel; //PDF 구현 성공 시 나타나는 라벨
+    private JLabel FailLabel; //PDF 구현 실패 시 나타나는 라벨
     private JLabel ALable; //번역된 PDF는 기존 PDF가 있던 자리에 생성됨을 알려주는 라벨
 
     public PDFtoImageGUI(PDFtoImage pdFtoImage, Client client){
@@ -58,6 +59,9 @@ public class PDFtoImageGUI extends JFrame {
         SuccessLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
         SuccessLabel.setBounds(50,220,300,30);
 
+        FailLabel = new JLabel("PDF 변환 실패");
+        FailLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
+        FailLabel.setBounds(50,220,300,30);
 
         String[] languages = {"ko", "en", "ja", "zh-CN", "zh-TW", "vi", "id", "th", "de", "ru", "es", "it", "fr"};
         languageComboBox = new JComboBox<>(languages);
@@ -86,7 +90,6 @@ public class PDFtoImageGUI extends JFrame {
         add(exitButton);
         add(languageLable);
         add(languageComboBox);
-        //변환 성공시 추가할거임add(SuccessLabel);
         add(ALable);
 
         setVisible(true);
@@ -120,6 +123,7 @@ public class PDFtoImageGUI extends JFrame {
             int pageEnd; //PDF가 총 몇페이지인지
             pageEnd= pdFtoImage.convert(selectedFile, selectedFilePath);
 
+            boolean allTranslated = true;
             //클라이언트가 서버에 이미지들을 이미지 갯수만큼 보내 이미지를 번역합니다.
             for(int page = 0; page < pageEnd; ++page) {
                 JSONObject json = new JSONObject();
@@ -128,10 +132,40 @@ public class PDFtoImageGUI extends JFrame {
                 json.put("sourceLanguage", "auto");
                 json.put("targetLanguage", targetLanguage);
                 json.put("filename", filename);
-                String message = "PDFTRANSLATE:"+json.toString()+"\n";
+                String message = "PDFTRANSLATE:"+json.toString();
                 byte[] messageBytes = message.getBytes(StandardCharsets.UTF_8);
                 //한데 묶은 메시지를 바이트패턴으로 변환 후 서버로 전송
                 client.sendToServer(messageBytes);
+
+                // 서버의 응답을 기다립니다.
+                try{
+                InputStream in = client.getSocket().getInputStream();
+                byte[] buffer = new byte[1024];
+                int bytesReceived = in.read(buffer);
+                String serverMessage = new String(buffer, 0, bytesReceived, StandardCharsets.UTF_8);
+                if (!serverMessage.startsWith("PDFTRANSLATE:SUCCESS")) {
+                    System.out.println("번역 실패: " + page + " 페이지");
+                    allTranslated = false;
+                    break;
+                }}
+                catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+
+                try {
+                    Thread.sleep(1000); // 1초 대기
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (allTranslated) {
+                pdFtoImage.imagesToPdf(selectedFilePath, pageEnd);
+                SuccessLabel.setText("PDF 변환 성공");
+                add(SuccessLabel);
+            }
+            else {
+                SuccessLabel.setText("PDF 변환 실패");
+                add(FailLabel);
             }
             // selectedFilePath 변수에는 선택된 PDF 파일의 경로가 저장됩니다.
             // 이후 필요한 처리를 이곳에서 수행하면 됩니다.

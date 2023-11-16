@@ -131,9 +131,9 @@ public class Server {
                                     pdftoImage.translateImage(base64File, sourceLanguage, targetLanguage);
 
 
-                                    //String responseMessage = /*"PDFTRANSLATE:" +일단없앰*/translatedText;
-                                    //byte[] responseMessageBytes = responseMessage.getBytes(StandardCharsets.UTF_8);
-                                    //out.write(responseMessageBytes);
+                                    String responseMessage = "PDFTRANSLATE:SUCCESS";
+                                    byte[] responseMessageBytes = responseMessage.getBytes(StandardCharsets.UTF_8);
+                                    out.write(responseMessageBytes);
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }

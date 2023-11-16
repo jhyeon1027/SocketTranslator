@@ -68,7 +68,7 @@ public class Mainpage {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // b2 버튼이 클릭되면 ImageTranslator 클래스를 실행한다.
-                if (imageInstance == null){ //번역기가 실행중이지 않다면
+                if (imageInstance == null||imageInstance.isSocketClosed()){ //번역기가 실행중이지 않다면
                     imageInstance = new ImageTranslator();
                     imageInstance.connectToServer();
                 }
@@ -83,12 +83,12 @@ public class Mainpage {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // b3 버튼이 클릭되면 PDFtoImageGUI 클래스를 실행한다.
-                if (pdfInstance == null){
+                if (pdfInstance == null||pdfInstance.isSocketClosed()){
                     pdfInstance = new PDFtoImage();
                     pdfInstance.connectToServer();
                 }
                 else{
-                    //pdfInstance.setVisible(true);
+                    pdfInstance.getGUI().setVisible(true);
                 }
             }
         });
