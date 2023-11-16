@@ -102,7 +102,6 @@ public class PDFtoImageGUI extends JFrame {
     public void uploadPDF() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        JSONObject json = new JSONObject();
         fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
             public boolean accept(File f) {
                 return f.getName().toLowerCase().endsWith(".pdf") || f.isDirectory();
@@ -123,12 +122,13 @@ public class PDFtoImageGUI extends JFrame {
 
             //클라이언트가 서버에 이미지들을 이미지 갯수만큼 보내 이미지를 번역합니다.
             for(int page = 0; page < pageEnd; ++page) {
+                JSONObject json = new JSONObject();
                 System.out.println(("이미지 번역 시작"+page+"번"));
                 String filename = selectedFilePath + "_" + page + ".jpg";
                 json.put("sourceLanguage", "auto");
                 json.put("targetLanguage", targetLanguage);
                 json.put("filename", filename);
-                String message = "PDFTRANSLATE:"+json.toString();
+                String message = "PDFTRANSLATE:"+json.toString()+"\n";
                 byte[] messageBytes = message.getBytes(StandardCharsets.UTF_8);
                 //한데 묶은 메시지를 바이트패턴으로 변환 후 서버로 전송
                 client.sendToServer(messageBytes);

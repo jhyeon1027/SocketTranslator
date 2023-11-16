@@ -13,6 +13,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.awt.Image;
+import java.awt.Graphics2D;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -50,20 +52,41 @@ public class PDFtoImage {
             PDDocument document = PDDocument.load(pdfFile);
             PDFRenderer pdfRenderer = new PDFRenderer(document);
             pageEnd = document.getNumberOfPages();
-            // Remove '.pdf' from the image file prefix
+
             for (int page = 0; page < pageEnd; ++page) {
                 BufferedImage image = pdfRenderer.renderImageWithDPI(page, 300, ImageType.RGB);
+
+                // 이미지 크기가 1960x1960보다 크면 크기를 조절
+                if (image.getWidth() > 1960 || image.getHeight() > 1960) {
+                    int scaledWidth;
+                    int scaledHeight;
+                    if (image.getWidth() > image.getHeight()) { // 가로가 더 긴 경우
+                        scaledWidth = 1960;
+                        scaledHeight = (int) (image.getHeight() * (1960.0 / image.getWidth()));
+                    } else { // 세로가 더 긴 경우
+                        scaledHeight = 1960;
+                        scaledWidth = (int) (image.getWidth() * (1960.0 / image.getHeight()));
+                    }
+                    Image tmp = image.getScaledInstance(scaledWidth, scaledHeight, Image.SCALE_SMOOTH);
+                    BufferedImage scaledImage = new BufferedImage(scaledWidth, scaledHeight, BufferedImage.TYPE_INT_RGB);
+                    Graphics2D g2d = scaledImage.createGraphics();
+                    g2d.drawImage(tmp, 0, 0, null);
+                    g2d.dispose();
+                    image = scaledImage;
+                }
+
                 ImageIO.write(image, "JPEG", new File(imageFilePrefix + "_" + page + ".jpg"));
             }
             document.close();
             System.out.println(("이미지 나누기 끝"));
             return pageEnd;
-            //imagesToPdf(imageFilePrefix, pageEnd);
         } catch (IOException e) {
             e.printStackTrace();
         }
         return pageEnd;
     }
+
+
 
     public void imagesToPdf(String imageFilePrefix, int pageEnd) {
         System.out.println(("PDF합치기 시작. 경로 : " + imageFilePrefix));
@@ -96,7 +119,7 @@ public class PDFtoImage {
     }
 
     public void translateImage(String imageFilePath, String sourceLang, String targetLang) {
-        OkHttpClient client = new OkHttpClient().newBuilder().build();
+        OkHttpClient httpClient = new OkHttpClient().newBuilder().build();
 
         File imageFile = new File(imageFilePath);
         MediaType mediaType = MediaType.parse("image/jpeg");
@@ -113,14 +136,15 @@ public class PDFtoImage {
                 .addHeader("X-NCP-APIGW-API-KEY-ID", CLIENT_ID)
                 .addHeader("X-NCP-APIGW-API-KEY", CLIENT_SECRET)
                 .build();
-
+        System.out.println("1차");
         try {
-            Response response = client.newCall(request).execute();
+            Response response = httpClient.newCall(request).execute();
             String responseBody = response.body().string();
+            System.out.println(responseBody);
             JSONParser parser = new JSONParser();
             JSONObject jsonObject = (JSONObject) parser.parse(responseBody);
             String renderedImage = ((JSONObject) jsonObject.get("data")).get("renderedImage").toString();
-
+            System.out.println("2차");
             // Decode the Base64 image data and save it as a file
             byte[] imageBytes = Base64.getDecoder().decode(renderedImage);
             Files.write(Paths.get(imageFilePath), imageBytes);
@@ -134,5 +158,7 @@ public class PDFtoImage {
 
 
     public static void main(String[] args) {
+        //PDFtoImage pdfToImage = new PDFtoImage();
+        //pdfToImage.translateImage("C:\\Users\\wjdwh\\Downloads\\Imagetest\\Team Project (1)_0.jpg", "auto", "ko");
     }
 }
