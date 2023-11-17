@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import javax.swing.border.LineBorder;
+
 import java.io.*;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -79,17 +81,21 @@ public class NTranslatorGUI extends JFrame{
         ImageIcon imageIcon = new ImageIcon("src\\main\\resources\\bg_NT.png"); // Replace with your image path
         JLabel imageLabel = new JLabel("",imageIcon,JLabel.CENTER);
         imageLabel.setBounds(0, 0, imageIcon.getIconWidth(), imageIcon.getIconHeight()); // Set the bounds according to the image size
-        add(imageLabel);
         ImageIcon imageIcon2 = new ImageIcon("src\\main\\resources\\arrow.png"); // Replace with your image path
         JLabel imageLabel2 = new JLabel("",imageIcon2,JLabel.CENTER);
         imageLabel2.setBounds(453, 270, imageIcon2.getIconWidth(), imageIcon2.getIconHeight()); // Set the bounds according to the image size
         add(imageLabel2);
+        ImageIcon imageIcon3 = new ImageIcon("src\\main\\resources\\banner_NT.png"); // Replace with your image path
+        JLabel imageLabel3 = new JLabel("",imageIcon3,JLabel.CENTER);
+        imageLabel3.setBounds(0, 0, imageIcon3.getIconWidth(), imageIcon3.getIconHeight()); // Set the bounds according to the image size
+        add(imageLabel3);
+
 
 
 
 
         // JFrame 설정
-        setTitle("텍스트 번역기");
+        setTitle("CATPAGO - 언어 장벽 없이 대화하는 세상을 꿈꿉니다. ");
         setSize(965, 590);
         setLayout(null);
         setResizable(false); // 윈도우의 크기 조정을 불가능하게 한다.
@@ -98,11 +104,14 @@ public class NTranslatorGUI extends JFrame{
 
 
         // GUI 컴포넌트 초기화
-        inputArea = new JTextArea(); // 입력 창
+        inputArea = new JTextArea(" 이곳에 내용을 지우고 입력하세요."); // 입력 창, 언어감지는 발표에서
+        inputArea.setBorder(new LineBorder(new Color(0,0,0),2)); // Set a black border
         inputArea.setLineWrap(true); // 텍스트가 행 너비를 초과하면 자동으로 줄 바꿈
         inputArea.setBounds(50, 100, 400, 400);
 
-        outputArea = new JTextArea(); // 출력 창
+
+        outputArea = new JTextArea(" 번역 결과가 이곳에 표시됩니다."); // 출력 창
+        outputArea.setBorder(new LineBorder(new Color(0,0,0), 2)); // Set a black border
         outputArea.setLineWrap(true); // 텍스트가 행 너비를 초과하면 자동으로 줄 바꿈
         JScrollPane outputScrollPane = new JScrollPane(outputArea);
         outputArea.setBounds(501, 100, 400, 400);
@@ -142,6 +151,8 @@ public class NTranslatorGUI extends JFrame{
         add(CopyButton2);
         add(ResetButton3);
         add(ResetButton4);
+        add(imageLabel);
+
 
 
 

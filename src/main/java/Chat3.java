@@ -63,7 +63,7 @@ public class Chat3 extends JFrame {
 
 
     public void createChatUI() {
-        setTitle("Chat Client");
+        setTitle("CATPAGO - 언어 장벽 없이 대화하는 세상을 꿈꿉니다. ");
 
         chatArea = new JTextArea(); // 대화 내용이 보이는 박스
         chatArea.setEditable(false); // 대화 박스에 임의로 수정 불가능하게 만들기

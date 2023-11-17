@@ -54,7 +54,7 @@ public class PDFtoImageGUI extends JFrame {
         setIconImage(img);
         //각 프로그램별 로고이미지 부분
 
-        setTitle("PDF  번역기");
+        setTitle("CATPAGO - 언어 장벽 없이 대화하는 세상을 꿈꿉니다. ");
         setSize(500, 450);  // 크기 수정
         setLayout(null);
         setResizable(false); // 윈도우의 크기 조정을 불가능하게 한다.

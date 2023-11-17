@@ -60,7 +60,7 @@ public class ImageTranslatorGUI extends JFrame {
     }
 
     public void createImageTranslatorGUI(){
-        setTitle("이미지 번역기");
+        setTitle("CATPAGO - 언어 장벽 없이 대화하는 세상을 꿈꿉니다. ");
         setSize(1000, 900);  // 크기 수정
         setLayout(null);
         setResizable(false); // 윈도우의 크기 조정을 불가능하게 한다.
