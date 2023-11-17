@@ -201,23 +201,49 @@ public class Mainpage {
         b4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // b4 버튼이 클릭되면 Chat 클래스를 실행한다.
-                if (chatInstance == null || chatInstance.isSocketClosed()) { // 채팅방을 실행중이지 않거나 소켓이 닫혔으면
-                    chatInstance = new Chat();
-                    String username;
-                    while(true){
-                        username = JOptionPane.showInputDialog("사용자 이름을 입력하세요 :");
-                        if(username != null && !username.equals("")) break;
-                        else JOptionPane.showMessageDialog(null, "사용자 이름을 입력하세요.");
+                if (chatInstance == null || chatInstance.isSocketClosed()) {
+                    String username = null;
+
+                    // 사용자에게 이름 입력 받기
+                    while (true) {
+                        username = JOptionPane.showInputDialog("사용자 이름을 입력하세요:");
+                        if (username == null) {
+                            // 사용자가 취소 버튼을 눌렀을 경우
+                            break;
+                        } else if (!username.trim().isEmpty()) {
+                            // 사용자 이름이 비어있지 않은 경우
+                            if (chatInstance == null) {
+                                chatInstance = new Chat();
+                            }
+
+                            chatInstance.setUsername(username);
+
+                            // 비동기적으로 connectToServer 메서드 호출
+                            SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+                                @Override
+                                protected Void doInBackground() throws Exception {
+                                    chatInstance.connectToServer();
+                                    return null;
+                                }
+
+                                @Override
+                                protected void done() {
+                                    // GUI를 나타내는 코드
+                                    chatInstance.setVisible(true);
+                                }
+                            };
+
+                            worker.execute();  // SwingWorker 실행
+                            break;
+                        } else {
+                            JOptionPane.showMessageDialog(null, "사용자 이름을 입력하세요.");
+                        }
                     }
-                    chatInstance.setUsername(username);
-                    chatInstance.connectToServer();
                 } else {
                     chatInstance.setVisible(true);
                 }
             }
         });
-
         b5.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {

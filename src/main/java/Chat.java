@@ -1,4 +1,5 @@
 import  javax.swing.*;
+import javax.swing.text.DefaultCaret;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -40,6 +41,9 @@ public class Chat extends JFrame {
         this.nTranslator = new NTranslator();
         createChatUI();
         addWindowListener(new CustomWindowAdapter());
+        // 스크롤이 항상 아래로 이동하도록 설정
+        DefaultCaret caret = (DefaultCaret) chatArea.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
     }
     public boolean isSocketClosed() {
         return client.getSocket().isClosed();
@@ -105,6 +109,7 @@ public class Chat extends JFrame {
         userList.setBounds(320, 10, 100, 200);
         exitButton.setBounds(320, 250, 100, 30);
 
+
         add(chatScrollPane); // 수정된 chatScrollPane를 추가
         add(messageField);
         add(sendButton);
@@ -115,6 +120,7 @@ public class Chat extends JFrame {
 
         setSize(450, 330);
         setVisible(true);
+        messageField.requestFocus(); // 실행시 메시지 입력창에 커서가 위치하도록
     }
 
     public void sendUsername() {
@@ -128,12 +134,15 @@ public class Chat extends JFrame {
         public void actionPerformed(ActionEvent ev) {
             try {
                 // 클라이언트가 메시지를 보낼 때 사용자 이름을 붙여서 서버로 전송
-                String message = username + ": " + messageField.getText();
-                byte[] messageBytes = message.getBytes(StandardCharsets.UTF_8);
-                client.sendToServer(messageBytes);
+                String inputMessage = messageField.getText().trim();  // 메시지 양 끝의 공백을 제거
+                if (!inputMessage.isEmpty()) {  // 공백을 제거한 후 메시지가 비어있지 않은 경우에만 전송
+                    String message = username + ": " + inputMessage;
+                    byte[] messageBytes = message.getBytes(StandardCharsets.UTF_8);
+                    client.sendToServer(messageBytes);
 
-                // 채팅창에 내가 보낸 메시지 추가
-                chatArea.append(message + "\n");
+                    // 채팅창에 내가 보낸 메시지 추가
+                    chatArea.append(message + "\n");
+                }
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -141,6 +150,7 @@ public class Chat extends JFrame {
             messageField.requestFocus();
         }
     }
+
 
     public class IncomingReader implements Runnable {
         @Override
@@ -184,6 +194,8 @@ public class Chat extends JFrame {
                             chatArea.append(message + "\n");
                         }
                     }
+                    // 스크롤을 항상 아래로 이동
+                    chatArea.setCaretPosition(chatArea.getDocument().getLength());
                 }
             } catch (SocketException e) {
                 System.out.println("Chat closed");
