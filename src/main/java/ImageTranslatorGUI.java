@@ -22,6 +22,8 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -48,6 +50,7 @@ public class ImageTranslatorGUI extends JFrame {
         this.imageTranslator = imageTranslator; //ImageTranslator 인스턴스를 저장
         this.client = client; // Client 인스턴스를 저장
         createImageTranslatorGUI();
+        addWindowListener(new CustomWindowAdapter());
     }
 
     public void createImageTranslatorGUI(){
@@ -200,6 +203,18 @@ public class ImageTranslatorGUI extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {  // 서버와의 연결 종료
+                imageTranslator.disconnectFromServer();
+                dispose();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+    private class CustomWindowAdapter extends WindowAdapter {
+        @Override
+        public void windowClosing(WindowEvent e) {
+            try {
+                // 서버와의 연결 종료
                 imageTranslator.disconnectFromServer();
                 dispose();
             } catch (Exception ex) {

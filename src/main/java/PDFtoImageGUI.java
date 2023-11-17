@@ -13,6 +13,8 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -42,6 +44,7 @@ public class PDFtoImageGUI extends JFrame {
         this.pdFtoImage = pdFtoImage; //PDFtoImage 인스턴스를 저장
         this.client = client; // Client 인스턴스를 저장
         createPDFtoImageGUI();
+        addWindowListener(new CustomWindowAdapter());
     }
 
     public void createPDFtoImageGUI(){
@@ -194,4 +197,18 @@ public class PDFtoImageGUI extends JFrame {
             }
         }
     }
+
+    private class CustomWindowAdapter extends WindowAdapter {
+        @Override
+        public void windowClosing(WindowEvent e) {
+            try {
+                // 서버와의 연결 종료
+                pdFtoImage.disconnectFromServer();
+                dispose();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
 }

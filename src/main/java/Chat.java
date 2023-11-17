@@ -12,6 +12,8 @@ import java.net.SocketException;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import java.net.Socket;
 
@@ -32,6 +34,7 @@ public class Chat extends JFrame {
     public Chat() {
         this.nTranslator = new NTranslator();
         createChatUI();
+        addWindowListener(new CustomWindowAdapter());
     }
     public boolean isSocketClosed() {
         return client.getSocket().isClosed();
@@ -134,32 +137,6 @@ public class Chat extends JFrame {
         }
     }
 
-
-    public class ExitButtonListener implements ActionListener {
-        public void actionPerformed(ActionEvent ev) {
-            try {
-                // 클라이언트가 나갈 때 서버에 나갔음을 알리는 메시지 전송
-                String exitMessage = "EXIT:" + username;
-                byte[] exitMessageBytes = exitMessage.getBytes(StandardCharsets.UTF_8);
-                client.sendToServer(exitMessageBytes);
-
-                // 서버와의 연결 종료
-                //.getSocket().close();
-                client.disconnectFromServer();
-
-                // 채팅 내용 초기화
-                chatArea.setText("");
-
-
-
-                // Chat 창
-                dispose();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-    }
-
     public class IncomingReader implements Runnable {
         @Override
         public void run() {
@@ -206,6 +183,56 @@ public class Chat extends JFrame {
             } catch (SocketException e) {
                 System.out.println("Chat closed");
             } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+    public class ExitButtonListener implements ActionListener {
+        public void actionPerformed(ActionEvent ev) {
+            try {
+                // 클라이언트가 나갈 때 서버에 나갔음을 알리는 메시지 전송
+                String exitMessage = "EXIT:" + username;
+                byte[] exitMessageBytes = exitMessage.getBytes(StandardCharsets.UTF_8);
+                client.sendToServer(exitMessageBytes);
+
+                // 서버와의 연결 종료
+                //.getSocket().close();
+                client.disconnectFromServer();
+
+                // 채팅 내용 초기화
+                chatArea.setText("");
+
+
+
+                // Chat 창
+                dispose();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    private class CustomWindowAdapter extends WindowAdapter {
+        @Override
+        public void windowClosing(WindowEvent e) {
+            try {
+                // 클라이언트가 나갈 때 서버에 나갔음을 알리는 메시지 전송
+                String exitMessage = "EXIT:" + username;
+                byte[] exitMessageBytes = exitMessage.getBytes(StandardCharsets.UTF_8);
+                client.sendToServer(exitMessageBytes);
+
+                // 서버와의 연결 종료
+                //.getSocket().close();
+                client.disconnectFromServer();
+
+                // 채팅 내용 초기화
+                chatArea.setText("");
+
+
+
+                // Chat 창
+                dispose();
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }

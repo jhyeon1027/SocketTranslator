@@ -1,6 +1,8 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.*;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -33,6 +35,7 @@ public class NTranslatorGUI extends JFrame{
         this.nTranslator = nTranslator; // NTranslator 인스턴스를 저장
         this.client = client; // Client 인스턴스를 저장
         createNTranslatorGUI();
+        addWindowListener(new CustomWindowAdapter());
     }
 
     public void createNTranslatorGUI() {  // GUI부분@@@@
@@ -115,6 +118,18 @@ public class NTranslatorGUI extends JFrame{
     public class ExitButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent ev) {
             try {  // 서버와의 연결 종료
+                nTranslator.disconnectFromServer();
+                dispose();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+    private class CustomWindowAdapter extends WindowAdapter {
+        @Override
+        public void windowClosing(WindowEvent e) {
+            try {
+                // 서버와의 연결 종료
                 nTranslator.disconnectFromServer();
                 dispose();
             } catch (Exception ex) {
