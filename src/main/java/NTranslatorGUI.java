@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.border.LineBorder;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 
 import java.io.*;
 import java.io.BufferedReader;
@@ -123,13 +125,19 @@ public class NTranslatorGUI extends JFrame{
 
         CopyButton1 = new Mainpage.RoundedButton("복사",new Color(137,207,243));
         CopyButton1.setBounds(50, 510, 60, 20);
+        CopyButton1.addActionListener(new CopyButton1Listener());
+
         CopyButton2 = new Mainpage.RoundedButton("복사",new Color(137,207,243));
         CopyButton2.setBounds(501, 510, 60, 20);
+        CopyButton2.addActionListener(new CopyButton2Listener());
+
         ResetButton3 = new Mainpage.RoundedButton("초기화",new Color(160,233,255));
         ResetButton3.setBounds(125, 510, 60, 20);
+        ResetButton3.addActionListener(new ResetButtonListener());
+
         ResetButton4 = new Mainpage.RoundedButton("초기화",new Color(160,233,255));
         ResetButton4.setBounds(576, 510, 60, 20);
-        // 복사,초기화 버튼 미구현@@
+        ResetButton4.addActionListener(new ResetButtonListener());
 
         exitButton = new Mainpage.RoundedButton("나가기",new Color(155,164,181));
         exitButton.setBounds(801, 510, 100, 30);
@@ -192,6 +200,36 @@ public class NTranslatorGUI extends JFrame{
             }
         }
     }
+
+    public class CopyButton1Listener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // 입력 창의 텍스트를 클립보드에 복사
+            StringSelection stringSelection = new StringSelection(inputArea.getText());
+            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            clipboard.setContents(stringSelection, null);
+        }
+    }
+
+    public class CopyButton2Listener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // 출력 창의 텍스트를 클립보드에 복사
+            StringSelection stringSelection = new StringSelection(outputArea.getText());
+            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            clipboard.setContents(stringSelection, null);
+        }
+    }
+
+    public class ResetButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // 입력 창 초기화
+            inputArea.setText("");
+            outputArea.setText("");
+        }
+    }
+
 
 
     public class ExitButtonListener implements ActionListener {
