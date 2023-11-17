@@ -15,6 +15,29 @@ public class Mainpage {
     private static ImageTranslator imageInstance;
     private static PDFtoImage pdfInstance;
 
+    class RoundedButton extends JButton {
+
+        public RoundedButton() {
+            super();
+        }
+
+        public RoundedButton(String text) {
+            super(text);
+        }
+
+        public RoundedButton(Action action) {
+            super(action);
+        }
+
+        public RoundedButton(Icon icon) {
+            super(icon);
+        }
+
+        public RoundedButton(String text, Icon icon) {
+            super(text, icon);
+        }
+    }
+
     public void openMainpage() {
         JFrame f = new JFrame("CATPAGO - 언어 장벽 없이 대화하는 세상을 꿈꿉니다. "); // JFrame 객체를 생성한다.
         Toolkit toolkit = Toolkit.getDefaultToolkit();
