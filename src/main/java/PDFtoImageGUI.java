@@ -48,6 +48,12 @@ public class PDFtoImageGUI extends JFrame {
     }
 
     public void createPDFtoImageGUI(){
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        Image img = toolkit.getImage("src\\main\\resources\\CATPAGO_LOGO.png");
+        //@@ SocketTranslator\\src\\main\\resources\\CATPAGO_LOGO
+        setIconImage(img);
+        //각 프로그램별 로고이미지 부분
+
         setTitle("PDF  번역기");
         setSize(500, 450);  // 크기 수정
         setLayout(null);

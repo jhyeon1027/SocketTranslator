@@ -31,6 +31,12 @@ public class Chat3 extends JFrame {
         Chat2 chat = new Chat2();
     }
     public Chat3() {
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        Image img = toolkit.getImage("src\\main\\resources\\CATPAGO_LOGO.png");
+        //@@ SocketTranslator\\src\\main\\resources\\CATPAGO_LOGO
+        setIconImage(img);
+        //각 프로그램별 로고이미지 부분
+
         this.nTranslator = new NTranslator();
         createChatUI();
         String username = JOptionPane.showInputDialog("사용자 이름을 입력하세요 :");

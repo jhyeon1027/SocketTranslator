@@ -47,6 +47,12 @@ public class ImageTranslatorGUI extends JFrame {
     private JTextArea translatedTextArea;
 
     public ImageTranslatorGUI(ImageTranslator imageTranslator, Client client){
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        Image img = toolkit.getImage("src\\main\\resources\\CATPAGO_LOGO.png");
+        //@@ SocketTranslator\\src\\main\\resources\\CATPAGO_LOGO
+        setIconImage(img);
+        //각 프로그램별 로고이미지 부분
+
         this.imageTranslator = imageTranslator; //ImageTranslator 인스턴스를 저장
         this.client = client; // Client 인스턴스를 저장
         createImageTranslatorGUI();

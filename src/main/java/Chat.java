@@ -32,6 +32,11 @@ public class Chat extends JFrame {
     private NTranslator nTranslator;
 
     public Chat() {
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        Image img = toolkit.getImage("src\\main\\resources\\CATPAGO_LOGO.png");
+        //@@ SocketTranslator\\src\\main\\resources\\CATPAGO_LOGO
+        setIconImage(img);
+        //각 프로그램별 로고이미지 부분
         this.nTranslator = new NTranslator();
         createChatUI();
         addWindowListener(new CustomWindowAdapter());

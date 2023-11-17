@@ -1,4 +1,6 @@
 import javax.swing.*;
+import java.awt.*;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -18,6 +20,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class NTranslatorGUI extends JFrame{
+    private Map<String, String> languageCodeMap;
+    public void createLanguageCodeMap() {
+        languageCodeMap = new HashMap<>();
+        languageCodeMap.put("한국어로", "ko");
+        languageCodeMap.put("영어로", "en");
+        languageCodeMap.put("일본어로", "ja");
+        languageCodeMap.put("중국어(간체)로", "zh-CN");
+        languageCodeMap.put("중국어(번체)로", "zh-TW");
+        languageCodeMap.put("베트남어로", "vi");
+        languageCodeMap.put("인도네시아어로", "id");
+        languageCodeMap.put("태국어로", "th");
+        languageCodeMap.put("독일어로", "de");
+        languageCodeMap.put("러시아어로", "ru");
+        languageCodeMap.put("스페인어로", "es");
+        languageCodeMap.put("이탈리아어로", "it");
+        languageCodeMap.put("프랑스어로", "fr");
+
+        System.out.println(languageCodeMap);
+
+    }
 
     private Client client;
     private String username;
@@ -26,6 +48,9 @@ public class NTranslatorGUI extends JFrame{
     private JTextArea inputArea; // 입력 창
     private JTextArea outputArea; // 출력 창
     private JButton translateButton; // 번역 버튼
+    private JButton CopyButton1; // 번역 버튼
+    private JButton CopyButton2; // 번역 버튼
+
     private JButton exitButton;
     private JComboBox<String> languageComboBox; // 번역할 언어 소스 선택 콤보박스
 
@@ -39,38 +64,53 @@ public class NTranslatorGUI extends JFrame{
     }
 
     public void createNTranslatorGUI() {  // GUI부분@@@@
+
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        Image img = toolkit.getImage("src\\main\\resources\\CATPAGO_LOGO.png");
+        //@@ SocketTranslator\\src\\main\\resources\\CATPAGO_LOGO
+        setIconImage(img);
+        //각 프로그램별 로고이미지 부분
+
         // JFrame 설정
         setTitle("텍스트 번역기");
-        setSize(500, 500);
+        setSize(965, 590);
         setLayout(null);
         setResizable(false); // 윈도우의 크기 조정을 불가능하게 한다.
         setLocationRelativeTo(null); // 실행시 화면 중앙에서 실행되는 코드.
+        createLanguageCodeMap(); // 이 메서드를 호출해 languageCodeMap을 초기화해요.
 
 
 
         // GUI 컴포넌트 초기화
         inputArea = new JTextArea(); // 입력 창
         inputArea.setLineWrap(true); // 텍스트가 행 너비를 초과하면 자동으로 줄 바꿈
-        inputArea.setBounds(80, 20, 320, 150);
+        inputArea.setBounds(50, 100, 400, 400);
 
         outputArea = new JTextArea(); // 출력 창
         outputArea.setLineWrap(true); // 텍스트가 행 너비를 초과하면 자동으로 줄 바꿈
         JScrollPane outputScrollPane = new JScrollPane(outputArea);
-        outputArea.setBounds(80, 250, 320, 150);
+        outputArea.setBounds(500, 100, 400, 400);
         outputArea.setEditable(false);
 
-        translateButton = new JButton("번역");
-        translateButton.setBounds(200, 195, 100, 30);
+        translateButton = new Mainpage.RoundedButton("번역",new Color(0,169,255));
+        translateButton.setBounds(350, 510, 100, 30);
         translateButton.addActionListener(new translateButtonListener());
 
+        CopyButton1 = new Mainpage.RoundedButton("복사",new Color(137,207,243));
+        CopyButton1.setBounds(50, 510, 60, 20);
+        CopyButton2 = new Mainpage.RoundedButton("복사",new Color(137,207,243));
+        CopyButton2.setBounds(500, 510, 60, 20);
+        // 복사 버튼 미구현@@
 
-        exitButton = new JButton("나가기"); // 채팅방을 종료하는 나가기 버튼
-        exitButton.setBounds(320, 195, 100, 30);
+        exitButton = new Mainpage.RoundedButton("나가기",new Color(155,164,181));
+        exitButton.setBounds(800, 510, 100, 30);
         exitButton.addActionListener(new ExitButtonListener());
 
         // 콤보박스 초기화 및 설정
-        languageComboBox = new JComboBox<>(new String[]{"ko", "en", "ja", "zh-CN", "zh-TW", "vi", "id", "th", "de", "ru", "es", "it", "fr"});
-        languageComboBox.setBounds(80, 195, 100, 30);
+        languageComboBox = new JComboBox<>(new String[]{"한국어로", "영어로", "일본어로", "중국어(간체)로", "중국어(번체)로", "베트남어로", "인도네시아어로", "태국어로", "독일어로", "러시아어로", "스페인어로", "이탈리아어로", "프랑스어로"});
+        languageComboBox.setBounds(225, 510, 120, 30);
+
+
 
         // 컴포넌트를 프레임에 추가
         add(inputArea);
@@ -78,6 +118,8 @@ public class NTranslatorGUI extends JFrame{
         add(translateButton);
         add(exitButton);
         add(languageComboBox);
+        add(CopyButton1);
+        add(CopyButton2);
 
 
 
@@ -86,9 +128,12 @@ public class NTranslatorGUI extends JFrame{
     public class translateButtonListener implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
+            String targetLanguageDisplay = (String) languageComboBox.getSelectedItem();
+            String targetLanguage = languageCodeMap.get(targetLanguageDisplay);
             String inputText = inputArea.getText();
             String sourceLanguage = nTranslator.detectLanguage(inputText); //언어감지
-            String targetLanguage = (String) languageComboBox.getSelectedItem(); //타켓언어는 콤보박스에서 선택한 언어로
+            System.out.println("선택된 표시 언어: " + targetLanguageDisplay);
+            System.out.println("매핑된 언어 코드: " + targetLanguage); // 받아온 언어 코드 확인하기
             System.out.println("원본메시지: " + inputText); //여기부터 아래는없애도 되는 부분 검수용
             System.out.println("타겟언어: " + targetLanguage); //
             System.out.println("소스언어: " + sourceLanguage); //

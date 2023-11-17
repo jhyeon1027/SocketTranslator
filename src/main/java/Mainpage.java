@@ -15,7 +15,7 @@ public class Mainpage {
     private static ImageTranslator imageInstance;
     private static PDFtoImage pdfInstance;
 
-    class RoundedButton extends JButton {
+    public static class RoundedButton extends JButton {
 
         private Color bgColor;
         public RoundedButton(String text, Color bgColor){
@@ -73,8 +73,12 @@ public class Mainpage {
             }
 
             if (this.getText().equals("나가기")){ // b5 버튼의 둥근 정도를 작게 조정
-                graphics.fillRoundRect(0, 0, width, height, 20, 20); // b5 버튼만 둥근 정도를 줄임
-            } else {
+                graphics.fillRoundRect(0, 0, width, height, 20, 20); // 나가기 버튼만 둥근 정도를 줄임
+            } else if(this.getText().equals("번역")){
+                graphics.fillRoundRect(0, 0, width, height, 20, 20); // 나가기 버튼만 둥근 정도를 줄임
+            } else if(this.getText().equals("복사")){
+                graphics.fillRoundRect(0, 0, width, height, 10, 10); // 나가기 버튼만 둥근 정도를 줄임
+            } else{
                 graphics.fillRoundRect(0, 0, width, height, 50, 50); // 다른 버튼들은 기존 둥근 정도 유지
             }
 
