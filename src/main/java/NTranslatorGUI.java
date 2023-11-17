@@ -35,7 +35,7 @@ public class NTranslatorGUI extends JFrame{
         createNTranslatorGUI();
     }
 
-    public void createNTranslatorGUI() {
+    public void createNTranslatorGUI() {  // GUI부분@@@@
         // JFrame 설정
         setTitle("텍스트 번역기");
         setSize(500, 500);
