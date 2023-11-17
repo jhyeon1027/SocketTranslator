@@ -73,9 +73,9 @@ public class Mainpage {
             }
 
             if (this.getText().equals("나가기")){ // b5 버튼의 둥근 정도를 작게 조정
-                graphics.fillRoundRect(0, 0, width, height, 0, 0); // b5 버튼만 둥근 정도를 줄임
+                graphics.fillRoundRect(0, 0, width, height, 20, 20); // b5 버튼만 둥근 정도를 줄임
             } else {
-                graphics.fillRoundRect(0, 0, width, height, 0, 0); // 다른 버튼들은 기존 둥근 정도 유지
+                graphics.fillRoundRect(0, 0, width, height, 50, 50); // 다른 버튼들은 기존 둥근 정도 유지
             }
 
             FontMetrics fontMetrics = graphics.getFontMetrics();
@@ -124,14 +124,14 @@ public class Mainpage {
         RoundedButton b2 = new RoundedButton("이미지 번역",new Color(180,189,255)); // JButton 객체를 생성한다.
         RoundedButton b3 = new RoundedButton(" PDF  번역",new Color(255,227,187)); // JButton 객체를 생성한다.
         RoundedButton b4 = new RoundedButton("글로벌 채팅",new Color(255,210,143)); // JButton 객체를 생성한다.
-        RoundedButton b5 = new RoundedButton("나가기", Color.LIGHT_GRAY); // JButton 객체를 생성한다.
+        RoundedButton b5 = new RoundedButton("나가기", new Color(155,164,181)); // JButton 객체를 생성한다.
 
 
-        b1.setBounds(0, 450, 500, 100); // 버튼의 위치와 크기를 설정한다.
-        b2.setBounds(0, 550, 500, 100); // 버튼의 위치와 크기를 설정한다.
-        b3.setBounds(0, 650, 500, 100); // 버튼의 위치와 크기를 설정한다.
-        b4.setBounds(0, 750, 500, 100); // 버튼의 위치와 크기를 설정한다.
-        b5.setBounds(0, 850, 500, 40); // 버튼의 위치와 크기를 설정한다.
+        b1.setBounds(125, 460, 250, 65); // 버튼의 위치와 크기를 설정한다.
+        b2.setBounds(125, 550, 250, 65); // 버튼의 위치와 크기를 설정한다.
+        b3.setBounds(125, 640, 250, 65); // 버튼의 위치와 크기를 설정한다.
+        b4.setBounds(125, 730, 250, 65); // 버튼의 위치와 크기를 설정한다.
+        b5.setBounds(380, 830, 100, 30); // 버튼의 위치와 크기를 설정한다.
 
         f.add(b1); // 버튼을 윈도우에 추가한다.
         f.add(b2); // 버튼을 윈도우에 추가한다.
@@ -139,7 +139,7 @@ public class Mainpage {
         f.add(b4); // 버튼을 윈도우에 추가한다.
         f.add(b5); // 버튼을 윈도우에 추가한다.
 
-        f.setSize(516, 930); // 윈도우의 크기를 설정한다.
+        f.setSize(516, 910); // 윈도우의 크기를 설정한다.
         f.setLayout(null); // 윈도우의 레이아웃을 설정한다.
         f.setVisible(true); // 윈도우의 가시성을 설정한다.
         // GUI부분@@@@
