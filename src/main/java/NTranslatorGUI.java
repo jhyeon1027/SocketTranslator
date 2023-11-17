@@ -47,9 +47,14 @@ public class NTranslatorGUI extends JFrame{
     // GUI 컴포넌트 선언
     private JTextArea inputArea; // 입력 창
     private JTextArea outputArea; // 출력 창
+
+
     private JButton translateButton; // 번역 버튼
-    private JButton CopyButton1; // 번역 버튼
-    private JButton CopyButton2; // 번역 버튼
+    private JButton CopyButton1;
+    private JButton CopyButton2;
+    private JButton ResetButton3;
+    private JButton ResetButton4;
+
 
     private JButton exitButton;
     private JComboBox<String> languageComboBox; // 번역할 언어 소스 선택 콤보박스
@@ -71,6 +76,18 @@ public class NTranslatorGUI extends JFrame{
         setIconImage(img);
         //각 프로그램별 로고이미지 부분
 
+        ImageIcon imageIcon = new ImageIcon("src\\main\\resources\\bg_NT.png"); // Replace with your image path
+        JLabel imageLabel = new JLabel("",imageIcon,JLabel.CENTER);
+        imageLabel.setBounds(0, 0, imageIcon.getIconWidth(), imageIcon.getIconHeight()); // Set the bounds according to the image size
+        add(imageLabel);
+        ImageIcon imageIcon2 = new ImageIcon("src\\main\\resources\\arrow.png"); // Replace with your image path
+        JLabel imageLabel2 = new JLabel("",imageIcon2,JLabel.CENTER);
+        imageLabel2.setBounds(453, 270, imageIcon2.getIconWidth(), imageIcon2.getIconHeight()); // Set the bounds according to the image size
+        add(imageLabel2);
+
+
+
+
         // JFrame 설정
         setTitle("텍스트 번역기");
         setSize(965, 590);
@@ -78,7 +95,6 @@ public class NTranslatorGUI extends JFrame{
         setResizable(false); // 윈도우의 크기 조정을 불가능하게 한다.
         setLocationRelativeTo(null); // 실행시 화면 중앙에서 실행되는 코드.
         createLanguageCodeMap(); // 이 메서드를 호출해 languageCodeMap을 초기화해요.
-
 
 
         // GUI 컴포넌트 초기화
@@ -89,7 +105,7 @@ public class NTranslatorGUI extends JFrame{
         outputArea = new JTextArea(); // 출력 창
         outputArea.setLineWrap(true); // 텍스트가 행 너비를 초과하면 자동으로 줄 바꿈
         JScrollPane outputScrollPane = new JScrollPane(outputArea);
-        outputArea.setBounds(500, 100, 400, 400);
+        outputArea.setBounds(501, 100, 400, 400);
         outputArea.setEditable(false);
 
         translateButton = new Mainpage.RoundedButton("번역",new Color(0,169,255));
@@ -99,11 +115,15 @@ public class NTranslatorGUI extends JFrame{
         CopyButton1 = new Mainpage.RoundedButton("복사",new Color(137,207,243));
         CopyButton1.setBounds(50, 510, 60, 20);
         CopyButton2 = new Mainpage.RoundedButton("복사",new Color(137,207,243));
-        CopyButton2.setBounds(500, 510, 60, 20);
-        // 복사 버튼 미구현@@
+        CopyButton2.setBounds(501, 510, 60, 20);
+        ResetButton3 = new Mainpage.RoundedButton("초기화",new Color(160,233,255));
+        ResetButton3.setBounds(125, 510, 60, 20);
+        ResetButton4 = new Mainpage.RoundedButton("초기화",new Color(160,233,255));
+        ResetButton4.setBounds(576, 510, 60, 20);
+        // 복사,초기화 버튼 미구현@@
 
         exitButton = new Mainpage.RoundedButton("나가기",new Color(155,164,181));
-        exitButton.setBounds(800, 510, 100, 30);
+        exitButton.setBounds(801, 510, 100, 30);
         exitButton.addActionListener(new ExitButtonListener());
 
         // 콤보박스 초기화 및 설정
@@ -120,6 +140,9 @@ public class NTranslatorGUI extends JFrame{
         add(languageComboBox);
         add(CopyButton1);
         add(CopyButton2);
+        add(ResetButton3);
+        add(ResetButton4);
+
 
 
 
