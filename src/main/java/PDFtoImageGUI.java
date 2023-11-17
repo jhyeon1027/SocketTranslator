@@ -36,6 +36,8 @@ public class PDFtoImageGUI extends JFrame {
     private JLabel FailLabel; //PDF 구현 실패 시 나타나는 라벨
     private JLabel ALable; //번역된 PDF는 기존 PDF가 있던 자리에 생성됨을 알려주는 라벨
 
+    private JProgressBar progressBar;
+
     public PDFtoImageGUI(PDFtoImage pdFtoImage, Client client){
         this.pdFtoImage = pdFtoImage; //PDFtoImage 인스턴스를 저장
         this.client = client; // Client 인스턴스를 저장
@@ -83,6 +85,10 @@ public class PDFtoImageGUI extends JFrame {
         ALable.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
         ALable.setBounds(50, 370, 400, 30);
 
+        progressBar = new JProgressBar();
+        progressBar.setBounds(50, 250, 400, 30); // 위치와 크기를 조절합니다.
+        progressBar.setStringPainted(true); // 진행 상태 텍스트 표시를 활성화합니다.
+
 
         add(titleLabel);
         add(uploadLable);
@@ -91,6 +97,8 @@ public class PDFtoImageGUI extends JFrame {
         add(languageLable);
         add(languageComboBox);
         add(ALable);
+        add(progressBar);
+
 
         setVisible(true);
     }
@@ -103,6 +111,7 @@ public class PDFtoImageGUI extends JFrame {
         }
     }
     public void uploadPDF() {
+
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
@@ -157,18 +166,19 @@ public class PDFtoImageGUI extends JFrame {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                progressBar.setValue((int) ((page + 1) / (double) pageEnd * 100));
+                progressBar.setString("PDF 변환 진행... (" + (page + 1) + "/" + pageEnd + ")");
             }
             if (allTranslated) {
                 pdFtoImage.imagesToPdf(selectedFilePath, pageEnd);
-                SuccessLabel.setText("PDF 변환 성공");
+                //삭제예정SuccessLabel.setText("PDF 변환 성공");
+
                 add(SuccessLabel);
             }
             else {
                 SuccessLabel.setText("PDF 변환 실패");
-                add(FailLabel);
+                //삭제예정add(FailLabel);
             }
-            // selectedFilePath 변수에는 선택된 PDF 파일의 경로가 저장됩니다.
-            // 이후 필요한 처리를 이곳에서 수행하면 됩니다.
         }
     }
     public class ExitButtonListener implements ActionListener {
