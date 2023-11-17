@@ -139,6 +139,7 @@ public class Mainpage {
         f.add(b4); // 버튼을 윈도우에 추가한다.
         f.add(b5); // 버튼을 윈도우에 추가한다.
 
+        f.setLocation(702,390); // fhd 기준 화면 중앙에서 실행되는 코드
         f.setSize(516, 910); // 윈도우의 크기를 설정한다.
         f.setLayout(null); // 윈도우의 레이아웃을 설정한다.
         f.setVisible(true); // 윈도우의 가시성을 설정한다.

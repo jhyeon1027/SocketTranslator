@@ -93,6 +93,8 @@ public class Chat2 extends JFrame {
         exitButton.addActionListener(new Chat2.ExitButtonListener());
 
         setLayout(null);
+        setResizable(false); // 윈도우의 크기 조정을 불가능하게 한다.
+        setLocationRelativeTo(null); // 실행시 화면 중앙에서 실행되는 코드.
 
         chatScrollPane.setBounds(10, 10, 300, 200);
         messageField.setBounds(10, 250, 200, 30);

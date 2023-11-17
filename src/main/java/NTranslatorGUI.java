@@ -40,6 +40,10 @@ public class NTranslatorGUI extends JFrame{
         setTitle("텍스트 번역기");
         setSize(500, 500);
         setLayout(null);
+        setResizable(false); // 윈도우의 크기 조정을 불가능하게 한다.
+        setLocationRelativeTo(null); // 실행시 화면 중앙에서 실행되는 코드.
+
+
 
         // GUI 컴포넌트 초기화
         inputArea = new JTextArea(); // 입력 창

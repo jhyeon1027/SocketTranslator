@@ -48,6 +48,8 @@ public class PDFtoImageGUI extends JFrame {
         setTitle("PDF  번역기");
         setSize(500, 450);  // 크기 수정
         setLayout(null);
+        setResizable(false); // 윈도우의 크기 조정을 불가능하게 한다.
+        setLocationRelativeTo(null); // 실행시 화면 중앙에서 실행되는 코드.
 
         titleLabel = new JLabel("PDF  번역기");
         titleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 20));
