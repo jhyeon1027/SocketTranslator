@@ -6,6 +6,15 @@ import java.io.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Base64;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.imageio.IIOImage;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.Path;
@@ -114,15 +123,45 @@ public class ImageTranslatorGUI extends JFrame {
             File selectedFile = fileChooser.getSelectedFile();
             JSONObject json = new JSONObject();
             try {
-                // 선택된 파일을 바이트 배열로 읽어옵니다.
-                byte[] fileBytes = Files.readAllBytes(selectedFile.toPath());
-                // 바이트 배열을 Base64 인코딩하여 문자열로 변환합니다.
-                String fileBase64 = Base64.getEncoder().encodeToString(fileBytes);
+                //선택된 이미지 파일의 품질을 낮춥니다.
+                BufferedImage image = ImageIO.read(selectedFile);
+                if (image == null) {
+                    System.out.println("Image is null");
+                    return;
+                }
+                System.out.println("Original image dimension: " + image.getWidth() + "x" + image.getHeight());
 
+                BufferedImage resizedImage = new BufferedImage(image.getWidth()/2, image.getHeight()/2, BufferedImage.TYPE_INT_RGB);
+                Graphics2D g = resizedImage.createGraphics();
+                g.drawImage(image, 0, 0, image.getWidth()/2, image.getHeight()/2, null);
+                g.dispose();
+                System.out.println("Resized image dimension: " + resizedImage.getWidth() + "x" + resizedImage.getHeight());
+
+                // 이미지를 바이트 배열로 변환합니다.
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                // 압축률을 조절하여 이미지를 저장합니다.
+                ImageOutputStream imageOutput = ImageIO.createImageOutputStream(baos);
+                ImageWriter writer = ImageIO.getImageWritersByFormatName("jpg").next();
+                ImageWriteParam param = writer.getDefaultWriteParam();
+                param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+                param.setCompressionQuality(0.5f); // 0.5 is 50% quality. Adjust this value as needed.
+                writer.setOutput(imageOutput);
+                writer.write(null, new IIOImage(resizedImage, null, null), param);
+                writer.dispose();
+
+                byte[] imageInByte = baos.toByteArray();
+                baos.close();
+                System.out.println("Byte array length: " + imageInByte.length);
+
+                // 바이트 배열을 Base64 인코딩하여 문자열로 변환합니다.
+                String fileBase64 = Base64.getEncoder().encodeToString(imageInByte);
+                System.out.println("Base64 string: " + fileBase64);
                 // JSON 객체에 정보를 저장합니다.
                 json.put("sourceLanguage", "auto");
                 json.put("targetLanguage", languageComboBox.getSelectedItem().toString());
                 json.put("image", fileBase64);
+
+                //JSON 객체를 문자열로 변환
                 String message = "IMAGETRANSLATE:"+json.toString();
                 byte[] messageBytes = message.getBytes(StandardCharsets.UTF_8);
                 //한데 묶은 메시지를 바이트패턴으로 변환 후 서버로 전송
@@ -130,7 +169,7 @@ public class ImageTranslatorGUI extends JFrame {
                 // 서버로부터 바이트패턴으로 번역된 텍스트를 받아옵니다.
                 try{
                     InputStream in = client.getSocket().getInputStream();
-                    byte[] buffer = new byte[1024];
+                    byte[] buffer = new byte[2*1024*1024];
                     int bytesReceived = in.read(buffer);
                     String serverMessage = new String(buffer, 0, bytesReceived, StandardCharsets.UTF_8);
                     // 서버로부터 받은 텍스트를 JSON 객체로 변환합니다.

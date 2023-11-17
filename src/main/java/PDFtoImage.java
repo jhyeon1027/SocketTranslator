@@ -92,7 +92,40 @@ public class PDFtoImage {
         return pageEnd;
     }
 
+    public void translateImage(String imageFilePath, String sourceLang, String targetLang) {
+        OkHttpClient httpClient = new OkHttpClient().newBuilder().build();
 
+        File imageFile = new File(imageFilePath);
+        MediaType mediaType = MediaType.parse("image/jpeg");
+        RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart("source", sourceLang)
+                .addFormDataPart("target", targetLang)
+                .addFormDataPart("image", imageFile.getName(),
+                        RequestBody.create(mediaType, imageFile))
+                .build();
+
+        Request request = new Request.Builder()
+                .url(IMAGE_TRANSLATE_TO_IMAGE_API_URL)
+                .method("POST", body)
+                .addHeader("X-NCP-APIGW-API-KEY-ID", CLIENT_ID)
+                .addHeader("X-NCP-APIGW-API-KEY", CLIENT_SECRET)
+                .build();
+        try {
+            Response response = httpClient.newCall(request).execute();
+            String responseBody = response.body().string();
+            System.out.println(responseBody);
+            JSONParser parser = new JSONParser();
+            JSONObject jsonObject = (JSONObject) parser.parse(responseBody);
+            String renderedImage = ((JSONObject) jsonObject.get("data")).get("renderedImage").toString();
+            // Decode the Base64 image data and save it as a file
+            byte[] imageBytes = Base64.getDecoder().decode(renderedImage);
+            Files.write(Paths.get(imageFilePath), imageBytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void imagesToPdf(String imageFilePrefix, int pageEnd) {
         System.out.println(("PDF합치기 시작. 경로 : " + imageFilePrefix));
@@ -119,51 +152,27 @@ public class PDFtoImage {
             File outputFile = new File(directory, outputPdfFile);
 
             doc.save(outputFile);
+            for (int page = 0; page < pageEnd; ++page) {
+                filename = imageFilePrefix + "_" + page + ".jpg";
+                File file2 = new File(filename);
+                if(file2.delete()){
+                    System.out.println(filename + " 파일 삭제 성공");
+                }else{
+                    System.out.println(filename + " 파일 삭제 실패");
+                }
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void translateImage(String imageFilePath, String sourceLang, String targetLang) {
-        OkHttpClient httpClient = new OkHttpClient().newBuilder().build();
 
-        File imageFile = new File(imageFilePath);
-        MediaType mediaType = MediaType.parse("image/jpeg");
-        RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
-                .addFormDataPart("source", sourceLang)
-                .addFormDataPart("target", targetLang)
-                .addFormDataPart("image", imageFile.getName(),
-                        RequestBody.create(mediaType, imageFile))
-                .build();
-
-        Request request = new Request.Builder()
-                .url(IMAGE_TRANSLATE_TO_IMAGE_API_URL)
-                .method("POST", body)
-                .addHeader("X-NCP-APIGW-API-KEY-ID", CLIENT_ID)
-                .addHeader("X-NCP-APIGW-API-KEY", CLIENT_SECRET)
-                .build();
-        System.out.println("1차");
-        try {
-            Response response = httpClient.newCall(request).execute();
-            String responseBody = response.body().string();
-            System.out.println(responseBody);
-            JSONParser parser = new JSONParser();
-            JSONObject jsonObject = (JSONObject) parser.parse(responseBody);
-            String renderedImage = ((JSONObject) jsonObject.get("data")).get("renderedImage").toString();
-            System.out.println("2차");
-            // Decode the Base64 image data and save it as a file
-            byte[] imageBytes = Base64.getDecoder().decode(renderedImage);
-            Files.write(Paths.get(imageFilePath), imageBytes);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-    }
 
 
 
     public static void main(String[] args) {
+        //테스트용
         //PDFtoImage pdfToImage = new PDFtoImage();
         //pdfToImage.translateImage("C:\\Users\\wjdwh\\Downloads\\Imagetest\\Team Project (1)_0.jpg", "auto", "ko");
     }

@@ -43,11 +43,11 @@ public class PDFtoImageGUI extends JFrame {
     }
 
     public void createPDFtoImageGUI(){
-        setTitle("이미지 번역기");
+        setTitle("PDF  번역기");
         setSize(500, 450);  // 크기 수정
         setLayout(null);
 
-        titleLabel = new JLabel("이미지 번역기");
+        titleLabel = new JLabel("PDF  번역기");
         titleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 20));
         titleLabel.setBounds(200, 10, 200, 30);
 
