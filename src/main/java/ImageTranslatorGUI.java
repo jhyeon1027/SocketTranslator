@@ -71,6 +71,10 @@ public class ImageTranslatorGUI extends JFrame {
         ImageIcon imageIcon = new ImageIcon("src\\main\\resources\\bg_NT.png"); // Replace with your image path
         JLabel imageLabel = new JLabel("",imageIcon,JLabel.CENTER);
         imageLabel.setBounds(0, 0, imageIcon.getIconWidth(), imageIcon.getIconHeight()); // Set the bounds according to the image size
+        ImageIcon imageIcon2 = new ImageIcon("src\\main\\resources\\arrow.png"); // Replace with your image path
+        JLabel imageLabel2 = new JLabel("",imageIcon2,JLabel.CENTER);
+        imageLabel2.setBounds(453, 270, imageIcon2.getIconWidth(), imageIcon2.getIconHeight()); // Set the bounds according to the image size
+        add(imageLabel2);
 
         setTitle("CATPAGO - 언어 장벽 없이 대화하는 세상을 꿈꿉니다. ");
         setSize(965, 590);  // 크기 수정
@@ -89,18 +93,18 @@ public class ImageTranslatorGUI extends JFrame {
 
         String[] languages = {"ko", "en", "ja", "zh-CN", "zh-TW", "vi", "id", "th", "de", "ru", "es", "it", "fr"};
         languageComboBox = new JComboBox<>(languages);
-        languageComboBox.setBounds(50, 40, 100, 30);  // 크기 수정
+        languageComboBox.setBounds(225, 505, 120, 30);  // 크기 수정
 
         uploadLable = new JLabel("2. 글자를 인식할 이미지 선택");
         uploadLable.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
         uploadLable.setBounds(400, 10, 300, 30);
 
-        uploadButton = new Mainpage.RoundedButton("업로드", new Color(137,207,243));
-        uploadButton.setBounds(480, 40, 100, 30);
+        uploadButton = new Mainpage.RoundedButton("업로드 및 번역", new Color(0,169,255));
+        uploadButton.setBounds(350, 505, 100, 30);
         uploadButton.addActionListener(new uploadButtonListener());
 
         exitButton = new Mainpage.RoundedButton("나가기",new Color(155,164,181));
-        exitButton.setBounds(801, 510, 100, 30);
+        exitButton.setBounds(801, 505, 100, 30);
         exitButton.addActionListener(new ExitButtonListener());
 
         CopyButton1 = new Mainpage.RoundedButton("복사",new Color(137,207,243));
@@ -119,8 +123,6 @@ public class ImageTranslatorGUI extends JFrame {
         ResetButton4.setBounds(576, 510, 60, 20);
         ResetButton4.addActionListener(new ResetButtonListener());
 
-        exitButton = new Mainpage.RoundedButton("나가기",new Color(155,164,181));
-        exitButton.setBounds(801, 510, 100, 30);
 
         originalTextArea = new JTextArea(" 이미지 텍스트 변환 결과가 이곳에 표시됩니다.\n인식이 올바르지 않은 부분은 직접 수정할 수 있습니다.");
         originalTextArea.setBorder(new LineBorder(new Color(0,0,0),2)); // Set a black border

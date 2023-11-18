@@ -104,7 +104,7 @@ public class NTranslatorGUI extends JFrame{
         outputScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 
         translateButton = new Mainpage.RoundedButton("번역",new Color(0,169,255));
-        translateButton.setBounds(350, 510, 100, 30);
+        translateButton.setBounds(350, 505, 100, 30);
         translateButton.addActionListener(new translateButtonListener());
 
         CopyButton1 = new Mainpage.RoundedButton("복사",new Color(137,207,243));
@@ -124,12 +124,12 @@ public class NTranslatorGUI extends JFrame{
         ResetButton4.addActionListener(new ResetButtonListener());
 
         exitButton = new Mainpage.RoundedButton("나가기",new Color(155,164,181));
-        exitButton.setBounds(801, 510, 100, 30);
+        exitButton.setBounds(801, 505, 100, 30);
         exitButton.addActionListener(new ExitButtonListener());
 
         // 콤보박스 초기화 및 설정
         languageComboBox = new JComboBox<>(new String[]{"한국어로", "영어로", "일본어로", "중국어(간체)로", "중국어(번체)로", "베트남어로", "인도네시아어로", "태국어로", "독일어로", "러시아어로", "스페인어로", "이탈리아어로", "프랑스어로"});
-        languageComboBox.setBounds(225, 510, 120, 30);
+        languageComboBox.setBounds(225, 505, 120, 30);
 
 
 
