@@ -17,6 +17,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.Graphics2D;
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -85,6 +86,8 @@ public class PDFtoImage {
             }
             document.close();
             System.out.println(("이미지 나누기 끝"));
+            PDFtoImageGUI.progressBar.setString("PDF 변환 진행 중 ...");
+
             return pageEnd;
         } catch (IOException e) {
             e.printStackTrace();
