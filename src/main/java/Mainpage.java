@@ -81,7 +81,7 @@ public class Mainpage {
             } else if(this.getText().equals("초기화")){
                 graphics.fillRoundRect(0, 0, width, height, 10, 10); // 나가기 버튼만 둥근 정도를 줄임
             } else if(this.getText().equals("업로드 및 번역")){
-                graphics.fillRoundRect(0, 0, width, height, 10, 10); // 나가기 버튼만 둥근 정도를 줄임
+                graphics.fillRoundRect(0, 0, width, height, 20, 20); // 나가기 버튼만 둥근 정도를 줄임
             } else{
                 graphics.fillRoundRect(0, 0, width, height, 50, 50); // 다른 버튼들은 기존 둥근 정도 유지
             }

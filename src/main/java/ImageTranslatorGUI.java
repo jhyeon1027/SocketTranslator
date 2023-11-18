@@ -37,6 +37,7 @@ import java.util.HashMap;
 import java.util.Map;
 public class ImageTranslatorGUI extends JFrame {
 
+    private Map<String, String> languageCodeMap;
     private Client client;
     private ImageTranslator imageTranslator;
 
@@ -50,6 +51,7 @@ public class ImageTranslatorGUI extends JFrame {
     private JButton CopyButton2;
     private JButton ResetButton3;
     private JButton ResetButton4;
+
     private JComboBox<String> languageComboBox;
     private JTextArea originalTextArea;
     private JTextArea translatedTextArea;
@@ -67,6 +69,26 @@ public class ImageTranslatorGUI extends JFrame {
         addWindowListener(new CustomWindowAdapter());
     }
 
+    private void createLanguageCodeMap() {
+        languageCodeMap = new HashMap<>();
+        languageCodeMap.put("한국어로", "ko");
+        languageCodeMap.put("영어로", "en");
+        languageCodeMap.put("일본어로", "ja");
+        languageCodeMap.put("중국어(간체)로", "zh-CN");
+        languageCodeMap.put("중국어(번체)로", "zh-TW");
+        languageCodeMap.put("베트남어로", "vi");
+        languageCodeMap.put("인도네시아어로", "id");
+        languageCodeMap.put("태국어로", "th");
+        languageCodeMap.put("독일어로", "de");
+        languageCodeMap.put("러시아어로", "ru");
+        languageCodeMap.put("스페인어로", "es");
+        languageCodeMap.put("이탈리아어로", "it");
+        languageCodeMap.put("프랑스어로", "fr");
+
+        System.out.println(languageCodeMap);
+
+    }
+
     public void createImageTranslatorGUI(){
         ImageIcon imageIcon = new ImageIcon("src\\main\\resources\\bg_NT.png"); // Replace with your image path
         JLabel imageLabel = new JLabel("",imageIcon,JLabel.CENTER);
@@ -75,27 +97,32 @@ public class ImageTranslatorGUI extends JFrame {
         JLabel imageLabel2 = new JLabel("",imageIcon2,JLabel.CENTER);
         imageLabel2.setBounds(453, 270, imageIcon2.getIconWidth(), imageIcon2.getIconHeight()); // Set the bounds according to the image size
         add(imageLabel2);
+        ImageIcon imageIcon3 = new ImageIcon("src\\main\\resources\\banner_IMAGE.png"); // Replace with your image path
+        JLabel imageLabel3 = new JLabel("",imageIcon3,JLabel.CENTER);
+        imageLabel3.setBounds(0, 0, imageIcon3.getIconWidth(), imageIcon3.getIconHeight()); // Set the bounds according to the image size
+        add(imageLabel3);
 
         setTitle("CATPAGO - 언어 장벽 없이 대화하는 세상을 꿈꿉니다. ");
         setSize(965, 590);  // 크기 수정
         setLayout(null);
         setResizable(false); // 윈도우의 크기 조정을 불가능하게 한다.
         setLocationRelativeTo(null); // 실행시 화면 중앙에서 실행되는 코드.
+        createLanguageCodeMap(); // 이 메서드를 호출해 languageCodeMap을 초기화해요.
+
 
         titleLabel = new JLabel("");
         titleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 20));
         titleLabel.setBounds(430, 10, 200, 30); //안쓰는 레이블, 배너로 처리할 부분
 
-        languageLable = new JLabel("1. 번역할 언어 선택");
+        languageLable = new JLabel("1. 번역할 언어 선택"); // 안쓰는 파트
         languageLable.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
         languageLable.setBounds(50, 10, 300, 30);
 
 
-        String[] languages = {"ko", "en", "ja", "zh-CN", "zh-TW", "vi", "id", "th", "de", "ru", "es", "it", "fr"};
-        languageComboBox = new JComboBox<>(languages);
+        languageComboBox = new JComboBox<>(new String[]{"한국어로", "영어로", "일본어로", "중국어(간체)로", "중국어(번체)로", "베트남어로", "인도네시아어로", "태국어로", "독일어로", "러시아어로", "스페인어로", "이탈리아어로", "프랑스어로"});
         languageComboBox.setBounds(225, 505, 120, 30);  // 크기 수정
 
-        uploadLable = new JLabel("2. 글자를 인식할 이미지 선택");
+        uploadLable = new JLabel("2. 글자를 인식할 이미지 선택"); // 안쓰는 파트
         uploadLable.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
         uploadLable.setBounds(400, 10, 300, 30);
 
@@ -124,7 +151,7 @@ public class ImageTranslatorGUI extends JFrame {
         ResetButton4.addActionListener(new ResetButtonListener());
 
 
-        originalTextArea = new JTextArea(" 이미지 텍스트 변환 결과가 이곳에 표시됩니다.\n인식이 올바르지 않은 부분은 직접 수정할 수 있습니다.");
+        originalTextArea = new JTextArea(" 이미지 텍스트 변환 결과가 이곳에 표시됩니다.\n 인식이 올바르지 않은 부분은 직접 수정하여 복사할 수 있습니다.");
         originalTextArea.setBorder(new LineBorder(new Color(0,0,0),2)); // Set a black border
         originalTextArea.setEditable(true);
         originalTextArea.setLineWrap(true);
@@ -207,11 +234,13 @@ public class ImageTranslatorGUI extends JFrame {
                 System.out.println("Byte array length: " + imageInByte.length);
 
                 // 바이트 배열을 Base64 인코딩하여 문자열로 변환합니다.
+                String targetLanguageDisplay = (String) languageComboBox.getSelectedItem();
+                String targetLanguage = languageCodeMap.get(targetLanguageDisplay);
                 String fileBase64 = Base64.getEncoder().encodeToString(imageInByte);
                 System.out.println("Base64 string: " + fileBase64);
                 // JSON 객체에 정보를 저장합니다.
                 json.put("sourceLanguage", "auto");
-                json.put("targetLanguage", languageComboBox.getSelectedItem().toString());
+                json.put("targetLanguage", targetLanguage);
                 json.put("image", fileBase64);
 
                 //JSON 객체를 문자열로 변환
