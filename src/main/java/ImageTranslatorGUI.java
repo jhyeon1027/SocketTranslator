@@ -15,6 +15,7 @@ import javax.imageio.IIOImage;
 import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
+import javax.swing.border.LineBorder;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.Path;
@@ -42,6 +43,11 @@ public class ImageTranslatorGUI extends JFrame {
     private JLabel languageLable;
     private JButton uploadButton;
     private JButton exitButton;
+
+    private JButton CopyButton1;
+    private JButton CopyButton2;
+    private JButton ResetButton3;
+    private JButton ResetButton4;
     private JComboBox<String> languageComboBox;
     private JTextArea originalTextArea;
     private JTextArea translatedTextArea;
@@ -60,51 +66,74 @@ public class ImageTranslatorGUI extends JFrame {
     }
 
     public void createImageTranslatorGUI(){
+        ImageIcon imageIcon = new ImageIcon("src\\main\\resources\\bg_NT.png"); // Replace with your image path
+        JLabel imageLabel = new JLabel("",imageIcon,JLabel.CENTER);
+        imageLabel.setBounds(0, 0, imageIcon.getIconWidth(), imageIcon.getIconHeight()); // Set the bounds according to the image size
+
         setTitle("CATPAGO - 언어 장벽 없이 대화하는 세상을 꿈꿉니다. ");
-        setSize(1000, 900);  // 크기 수정
+        setSize(965, 590);  // 크기 수정
         setLayout(null);
         setResizable(false); // 윈도우의 크기 조정을 불가능하게 한다.
         setLocationRelativeTo(null); // 실행시 화면 중앙에서 실행되는 코드.
 
-        titleLabel = new JLabel("이미지 번역기");
+        titleLabel = new JLabel("");
         titleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 20));
-        titleLabel.setBounds(430, 10, 200, 30);
+        titleLabel.setBounds(430, 10, 200, 30); //안쓰는 레이블, 배너로 처리할 부분
 
         languageLable = new JLabel("1. 번역할 언어 선택");
         languageLable.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
-        languageLable.setBounds(50, 70, 300, 30);
+        languageLable.setBounds(50, 10, 300, 30);
 
 
         String[] languages = {"ko", "en", "ja", "zh-CN", "zh-TW", "vi", "id", "th", "de", "ru", "es", "it", "fr"};
         languageComboBox = new JComboBox<>(languages);
-        languageComboBox.setBounds(50, 100, 100, 30);  // 크기 수정
+        languageComboBox.setBounds(50, 40, 100, 30);  // 크기 수정
 
         uploadLable = new JLabel("2. 글자를 인식할 이미지 선택");
         uploadLable.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
-        uploadLable.setBounds(50, 150, 300, 30);
+        uploadLable.setBounds(400, 10, 300, 30);
 
-        uploadButton = new JButton("Upload");
-        uploadButton.setBounds(50, 180, 100, 30);
+        uploadButton = new Mainpage.RoundedButton("업로드", new Color(137,207,243));
+        uploadButton.setBounds(480, 40, 100, 30);
         uploadButton.addActionListener(new uploadButtonListener());
 
-        exitButton = new JButton("나가기"); // 채팅방을 종료하는 나가기 버튼
-        exitButton.setBounds(850, 790, 100, 30);
+        exitButton = new Mainpage.RoundedButton("나가기",new Color(155,164,181));
+        exitButton.setBounds(801, 510, 100, 30);
         exitButton.addActionListener(new ExitButtonListener());
 
+        CopyButton1 = new Mainpage.RoundedButton("복사",new Color(137,207,243));
+        CopyButton1.setBounds(50, 510, 60, 20);
 
-        originalTextArea = new JTextArea("원문을 입력하세요.", 10, 20);
+        CopyButton2 = new Mainpage.RoundedButton("복사",new Color(137,207,243));
+        CopyButton2.setBounds(501, 510, 60, 20);
+
+        ResetButton3 = new Mainpage.RoundedButton("초기화",new Color(160,233,255));
+        ResetButton3.setBounds(125, 510, 60, 20);
+
+        ResetButton4 = new Mainpage.RoundedButton("초기화",new Color(160,233,255));
+        ResetButton4.setBounds(576, 510, 60, 20);
+
+        exitButton = new Mainpage.RoundedButton("나가기",new Color(155,164,181));
+        exitButton.setBounds(801, 510, 100, 30);
+
+        originalTextArea = new JTextArea(" 이미지 텍스트 변환 결과가 이곳에 표시됩니다.\n인식이 올바르지 않은 부분은 직접 수정할 수 있습니다.");
+        originalTextArea.setBorder(new LineBorder(new Color(0,0,0),2)); // Set a black border
+        originalTextArea.setEditable(true);
         originalTextArea.setLineWrap(true);
         originalTextArea.setWrapStyleWord(true);
         JScrollPane originalScrollPane = new JScrollPane(originalTextArea);
-        originalScrollPane.setBounds(50, 250, 400, 500);  // 크기 수정
+        originalScrollPane.setBounds(50, 100, 400, 400);  // 크기 수정
         originalScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-        translatedTextArea = new JTextArea("번역문이 나타납니다.", 10, 20);
+        translatedTextArea = new JTextArea(" 번역 결과가 이곳에 표시됩니다.", 10, 20);
+        translatedTextArea.setBorder(new LineBorder(new Color(0,0,0),2)); // Set a black border
         translatedTextArea.setLineWrap(true);
         translatedTextArea.setWrapStyleWord(true);
         JScrollPane translatedScrollPane = new JScrollPane(translatedTextArea);
-        translatedScrollPane.setBounds(550, 250, 400, 500);  // 크기 수정
+        translatedScrollPane.setBounds(501, 100, 400, 400);  // 크기 수정
         translatedScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        translatedTextArea.setEditable(false);
+
 
         add(titleLabel);
         add(uploadLable);
@@ -114,6 +143,11 @@ public class ImageTranslatorGUI extends JFrame {
         add(languageComboBox);
         add(originalScrollPane);
         add(translatedScrollPane);
+        add(CopyButton1);
+        add(CopyButton2);
+        add(ResetButton3);
+        add(ResetButton4);
+        add(imageLabel);
 
         setVisible(true);
     }
