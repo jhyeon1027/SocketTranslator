@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
@@ -201,6 +203,35 @@ public class ImageTranslatorGUI extends JFrame {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public class CopyButton1Listener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // 입력 창의 텍스트를 클립보드에 복사
+            StringSelection stringSelection = new StringSelection(originalTextArea.getText());
+            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            clipboard.setContents(stringSelection, null);
+        }
+    }
+
+    public class CopyButton2Listener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // 출력 창의 텍스트를 클립보드에 복사
+            StringSelection stringSelection = new StringSelection(translatedTextArea.getText());
+            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            clipboard.setContents(stringSelection, null);
+        }
+    }
+
+    public class ResetButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // 입력 창 초기화
+            originalTextArea.setText("");
+            translatedTextArea.setText("");
         }
     }
 

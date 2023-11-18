@@ -25,26 +25,6 @@ import java.util.Map;
 
 public class NTranslatorGUI extends JFrame{
     private Map<String, String> languageCodeMap;
-    public void createLanguageCodeMap() {
-        languageCodeMap = new HashMap<>();
-        languageCodeMap.put("한국어로", "ko");
-        languageCodeMap.put("영어로", "en");
-        languageCodeMap.put("일본어로", "ja");
-        languageCodeMap.put("중국어(간체)로", "zh-CN");
-        languageCodeMap.put("중국어(번체)로", "zh-TW");
-        languageCodeMap.put("베트남어로", "vi");
-        languageCodeMap.put("인도네시아어로", "id");
-        languageCodeMap.put("태국어로", "th");
-        languageCodeMap.put("독일어로", "de");
-        languageCodeMap.put("러시아어로", "ru");
-        languageCodeMap.put("스페인어로", "es");
-        languageCodeMap.put("이탈리아어로", "it");
-        languageCodeMap.put("프랑스어로", "fr");
-
-        System.out.println(languageCodeMap);
-
-    }
-
     private Client client;
     private String username;
 
@@ -109,15 +89,19 @@ public class NTranslatorGUI extends JFrame{
         inputArea = new JTextArea(" 이곳에 내용을 지우고 입력하세요."); // 입력 창, 언어감지는 발표에서
         inputArea.setBorder(new LineBorder(new Color(0,0,0),2)); // Set a black border
         inputArea.setLineWrap(true); // 텍스트가 행 너비를 초과하면 자동으로 줄 바꿈
-        inputArea.setBounds(50, 100, 400, 400);
+        //inputArea.setBounds(50, 100, 400, 400);
+        JScrollPane inputScrollPane = new JScrollPane(inputArea);
+        inputScrollPane.setBounds(50, 100, 400, 400);  // 크기 수정
+        inputScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
 
         outputArea = new JTextArea(" 번역 결과가 이곳에 표시됩니다."); // 출력 창
         outputArea.setBorder(new LineBorder(new Color(0,0,0), 2)); // Set a black border
         outputArea.setLineWrap(true); // 텍스트가 행 너비를 초과하면 자동으로 줄 바꿈
-        JScrollPane outputScrollPane = new JScrollPane(outputArea);
-        outputArea.setBounds(501, 100, 400, 400);
         outputArea.setEditable(false);
+        JScrollPane outputScrollPane = new JScrollPane(outputArea);
+        outputScrollPane.setBounds(501, 100, 400, 400);  // 크기 수정
+        outputScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
         translateButton = new Mainpage.RoundedButton("번역",new Color(0,169,255));
         translateButton.setBounds(350, 510, 100, 30);
@@ -150,8 +134,8 @@ public class NTranslatorGUI extends JFrame{
 
 
         // 컴포넌트를 프레임에 추가
-        add(inputArea);
-        add(outputArea);
+        add(inputScrollPane);
+        add(outputScrollPane);
         add(translateButton);
         add(exitButton);
         add(languageComboBox);
@@ -166,6 +150,26 @@ public class NTranslatorGUI extends JFrame{
 
 
         setVisible(true);
+    }
+
+    public void createLanguageCodeMap() {
+        languageCodeMap = new HashMap<>();
+        languageCodeMap.put("한국어로", "ko");
+        languageCodeMap.put("영어로", "en");
+        languageCodeMap.put("일본어로", "ja");
+        languageCodeMap.put("중국어(간체)로", "zh-CN");
+        languageCodeMap.put("중국어(번체)로", "zh-TW");
+        languageCodeMap.put("베트남어로", "vi");
+        languageCodeMap.put("인도네시아어로", "id");
+        languageCodeMap.put("태국어로", "th");
+        languageCodeMap.put("독일어로", "de");
+        languageCodeMap.put("러시아어로", "ru");
+        languageCodeMap.put("스페인어로", "es");
+        languageCodeMap.put("이탈리아어로", "it");
+        languageCodeMap.put("프랑스어로", "fr");
+
+        System.out.println(languageCodeMap);
+
     }
     public class translateButtonListener implements ActionListener{
         @Override
