@@ -1,7 +1,5 @@
 import javax.swing.*;
-import javax.swing.Timer;
 import java.awt.*;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;

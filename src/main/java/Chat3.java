@@ -1,6 +1,7 @@
 import org.json.simple.JSONObject;
 
 import javax.swing.*;
+import javax.swing.text.DefaultCaret;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,7 +29,7 @@ public class Chat3 extends JFrame {
     private String username;
     private NTranslator nTranslator;
     public static void main(String[] args){
-        Chat2 chat = new Chat2();
+        Chat3 chat = new Chat3();
     }
     public Chat3() {
         Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -67,16 +68,26 @@ public class Chat3 extends JFrame {
 
         chatArea = new JTextArea(); // 대화 내용이 보이는 박스
         chatArea.setEditable(false); // 대화 박스에 임의로 수정 불가능하게 만들기
+        chatArea.setLineWrap(true);
+        chatArea.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
 
         // JScrollPane를 사용하여 chatArea를 감싸 스크롤 추가
         JScrollPane chatScrollPane = new JScrollPane(chatArea);
-        chatScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        chatScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        chatScrollPane.getVerticalScrollBar().setBackground(new Color(235,235,235));
+
+        chatScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        chatScrollPane.setBorder(BorderFactory.createEmptyBorder());
+        chatScrollPane.getVerticalScrollBar().setBorder(BorderFactory.createEmptyBorder());
+        DefaultCaret caret = (DefaultCaret) chatArea.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 
         messageField = new JTextField(); // 메시지를 입력할 수 있는 박스
 
         sendButton = new JButton("전송"); // 메시지를 전송하는 버튼
         sendButton.addActionListener(new Chat3.SendButtonListener());
-
+        // 배경색을 파란색으로 지정
+        getContentPane().setBackground(new Color(58,63,83));
         messageField.addActionListener(new ActionListener() { //엔터키로 메시지를 보낼 수 있도록
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -89,11 +100,12 @@ public class Chat3 extends JFrame {
 
         // 번역할 언어 선택 콤보박스
         languageComboBox = new JComboBox<>(new String[]{"ko", "en", "ja", "zh-CN", "zh-TW", "vi", "id", "th", "de", "ru", "es", "it", "fr"});
-        languageComboBox.setBounds(220, 220, 90, 20);
+        languageComboBox.setBounds(465, 300, 90, 20);
+        languageComboBox.setBorder(BorderFactory.createEmptyBorder());
 
         // 번역 체크박스
         TranslationCheckbox = new JCheckBox("실시간 번역");
-        TranslationCheckbox.setBounds(320, 220, 100, 20);
+        TranslationCheckbox.setBounds(555, 300, 90, 20);
 
         exitButton = new JButton("나가기"); // 채팅방을 종료하는 나가기 버튼
         exitButton.addActionListener(new Chat3.ExitButtonListener());
@@ -102,11 +114,14 @@ public class Chat3 extends JFrame {
         setResizable(false); // 윈도우의 크기 조정을 불가능하게 한다.
         setLocationRelativeTo(null); // 실행시 화면 중앙에서 실행되는 코드.
 
-        chatScrollPane.setBounds(10, 10, 300, 200);
-        messageField.setBounds(10, 250, 200, 30);
-        sendButton.setBounds(220, 250, 90, 30);
-        userList.setBounds(320, 10, 100, 200);
-        exitButton.setBounds(320, 250, 100, 30);
+        chatScrollPane.setBounds(30, 30, 400, 240);
+        messageField.setBounds(30, 330, 200, 30);
+        messageField.setBackground(new Color(235,235,235));
+        messageField.setBorder(BorderFactory.createEmptyBorder());
+        sendButton.setBounds(220, 330, 90, 30);
+        sendButton.setBorder(BorderFactory.createEmptyBorder());
+        userList.setBounds(465, 30, 180, 240);
+        exitButton.setBounds(465, 330, 100, 30);
 
         add(chatScrollPane); // 수정된 chatScrollPane를 추가
         add(messageField);
@@ -116,7 +131,7 @@ public class Chat3 extends JFrame {
         add(languageComboBox);
         add(TranslationCheckbox);
 
-        setSize(450, 330);
+        setSize(670, 420);
         setVisible(true);
     }
 
