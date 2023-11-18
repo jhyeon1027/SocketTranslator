@@ -92,7 +92,7 @@ public class NTranslatorGUI extends JFrame{
         //inputArea.setBounds(50, 100, 400, 400);
         JScrollPane inputScrollPane = new JScrollPane(inputArea);
         inputScrollPane.setBounds(50, 100, 400, 400);  // 크기 수정
-        inputScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        inputScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 
 
         outputArea = new JTextArea(" 번역 결과가 이곳에 표시됩니다."); // 출력 창
@@ -101,7 +101,7 @@ public class NTranslatorGUI extends JFrame{
         outputArea.setEditable(false);
         JScrollPane outputScrollPane = new JScrollPane(outputArea);
         outputScrollPane.setBounds(501, 100, 400, 400);  // 크기 수정
-        outputScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        outputScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 
         translateButton = new Mainpage.RoundedButton("번역",new Color(0,169,255));
         translateButton.setBounds(350, 510, 100, 30);

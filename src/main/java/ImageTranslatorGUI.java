@@ -105,15 +105,19 @@ public class ImageTranslatorGUI extends JFrame {
 
         CopyButton1 = new Mainpage.RoundedButton("복사",new Color(137,207,243));
         CopyButton1.setBounds(50, 510, 60, 20);
+        CopyButton1.addActionListener(new CopyButton1Listener());
 
         CopyButton2 = new Mainpage.RoundedButton("복사",new Color(137,207,243));
         CopyButton2.setBounds(501, 510, 60, 20);
+        CopyButton2.addActionListener(new CopyButton2Listener());
 
         ResetButton3 = new Mainpage.RoundedButton("초기화",new Color(160,233,255));
         ResetButton3.setBounds(125, 510, 60, 20);
+        ResetButton3.addActionListener(new ResetButtonListener());
 
         ResetButton4 = new Mainpage.RoundedButton("초기화",new Color(160,233,255));
         ResetButton4.setBounds(576, 510, 60, 20);
+        ResetButton4.addActionListener(new ResetButtonListener());
 
         exitButton = new Mainpage.RoundedButton("나가기",new Color(155,164,181));
         exitButton.setBounds(801, 510, 100, 30);
@@ -125,7 +129,7 @@ public class ImageTranslatorGUI extends JFrame {
         originalTextArea.setWrapStyleWord(true);
         JScrollPane originalScrollPane = new JScrollPane(originalTextArea);
         originalScrollPane.setBounds(50, 100, 400, 400);  // 크기 수정
-        originalScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        originalScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 
         translatedTextArea = new JTextArea(" 번역 결과가 이곳에 표시됩니다.", 10, 20);
         translatedTextArea.setBorder(new LineBorder(new Color(0,0,0),2)); // Set a black border
@@ -133,7 +137,7 @@ public class ImageTranslatorGUI extends JFrame {
         translatedTextArea.setWrapStyleWord(true);
         JScrollPane translatedScrollPane = new JScrollPane(translatedTextArea);
         translatedScrollPane.setBounds(501, 100, 400, 400);  // 크기 수정
-        translatedScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        translatedScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         translatedTextArea.setEditable(false);
 
 
