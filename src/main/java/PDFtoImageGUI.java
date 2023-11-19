@@ -207,7 +207,7 @@ public class PDFtoImageGUI extends JFrame {
                 int bytesReceived = in.read(buffer);
                 String serverMessage = new String(buffer, 0, bytesReceived, StandardCharsets.UTF_8);
                 if (!serverMessage.startsWith("PDFTRANSLATE:SUCCESS")) {
-                    System.out.println("번역 실패: " + page + " 페이지");
+                    JOptionPane.showMessageDialog(null, "번역 실패: " + page + " 페이지", "오류", JOptionPane.ERROR_MESSAGE);
                     allTranslated = false;
                     break;
                 }}

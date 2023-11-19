@@ -9,7 +9,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import java.nio.file.Files;
-
+import java.util.Objects;
 
 
 public class Server {
@@ -113,7 +113,10 @@ public class Server {
                                     File imageFile = File.createTempFile("temp_image", ".jpg");
                                     Files.write(imageFile.toPath(), imageBytes);
                                     String translatedText = imageTranslator.translateImage(imageFile, sourceLanguage, targetLanguage);
-                                    String responseMessage = /*"IMAGETRANSLATE:" +일단없앰*/translatedText;
+                                    String responseMessage = translatedText;
+                                    if (Objects.equals(responseMessage, "null")){ //만약 Null값이 return된다면..
+                                        responseMessage = "IMAGETRANSLATE:FAIL";
+                                    }
                                     byte[] responseMessageBytes = responseMessage.getBytes(StandardCharsets.UTF_8);
                                     out.write(responseMessageBytes);
                                 } catch (ParseException e) {
@@ -128,10 +131,12 @@ public class Server {
                                     String sourceLanguage = (String) json.get("sourceLanguage");
                                     String targetLanguage = (String) json.get("targetLanguage");
 
-                                    pdftoImage.translateImage(base64File, sourceLanguage, targetLanguage);
-
-
-                                    String responseMessage = "PDFTRANSLATE:SUCCESS";
+                                    String responseMessage;
+                                    responseMessage=pdftoImage.translateImage(base64File, sourceLanguage, targetLanguage);
+                                    if(responseMessage=="Success")
+                                        responseMessage="PDFTRANSLATE:SUCCESS";
+                                    else if (responseMessage=="Fail")
+                                        responseMessage="PDFTRANSLATE:FAIL";
                                     byte[] responseMessageBytes = responseMessage.getBytes(StandardCharsets.UTF_8);
                                     out.write(responseMessageBytes);
                                 } catch (ParseException e) {

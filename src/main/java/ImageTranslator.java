@@ -72,9 +72,9 @@ public class ImageTranslator {
                 // 예외를 발생시키지 않고, 대신 로그를 출력하도록 변경
                 System.out.println("API request failed.");
                 // 사용자에게 알리는 팝업 메시지
-                SwingUtilities.invokeLater(() ->
-                        JOptionPane.showMessageDialog(null, "API 요청이 실패했습니다.", "오류", JOptionPane.ERROR_MESSAGE));
-                return null;
+                /*SwingUtilities.invokeLater(() ->
+                        JOptionPane.showMessageDialog(null, "API 요청이 실패했습니다.", "오류", JOptionPane.ERROR_MESSAGE));*/
+                return "null";
             }
 
             String responseBody = response.body().string();
