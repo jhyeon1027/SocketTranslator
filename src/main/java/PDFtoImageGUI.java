@@ -68,8 +68,8 @@ public class PDFtoImageGUI extends JFrame {
         imageLabel4.setBounds(50, 175, imageIcon4.getIconWidth(), imageIcon4.getIconHeight()); // Set the bounds according to the image size
         ImageIcon imageIcon5 = new ImageIcon("src\\main\\resources\\pdfs.png"); // Replace with your image path
         JLabel imageLabel5 = new JLabel("",imageIcon5,JLabel.CENTER);
-        imageLabel5.setBounds(180, 180, imageIcon5.getIconWidth(), imageIcon5.getIconHeight()); // Set the bounds according to the image size
-        add(imageLabel5); //pdfs 이미지 좀 더 찾아보기
+        imageLabel5.setBounds(205, 190, imageIcon5.getIconWidth(), imageIcon5.getIconHeight()); // Set the bounds according to the image size
+        add(imageLabel5);
 
         setTitle("CATPAGO - 언어 장벽 없이 대화하는 세상을 꿈꿉니다. ");
         setSize(525, 555);  // 크기 수정
@@ -109,9 +109,9 @@ public class PDFtoImageGUI extends JFrame {
         exitButton.setBounds(360, 475, 100, 30);
         exitButton.addActionListener(new PDFtoImageGUI.ExitButtonListener());
 
-        ALable = new JLabel("번역된 PDF파일은 기존 PDF파일이 있는 폴더에 저장됩니다.");
+        ALable = new JLabel("번역된 PDF파일은 기존 PDF파일이 있는 폴더에 새로 저장됩니다.");
         ALable.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
-        ALable.setBounds(70, 300, 400, 30);
+        ALable.setBounds(80, 300, 400, 30);
 
         progressBar = new JProgressBar();
         progressBar.setBounds(50, 435, 410, 30); // 위치와 크기를 조절합니다.
