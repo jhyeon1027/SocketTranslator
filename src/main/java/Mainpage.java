@@ -84,6 +84,8 @@ public class Mainpage {
                 graphics.fillRoundRect(0, 0, width, height, 20, 20); // 나가기 버튼만 둥근 정도를 줄임
             } else if(this.getText().equals(" 업로드 및 번역 ")){
                 graphics.fillRoundRect(0, 0, width, height, 30, 30); // 나가기 버튼만 둥근 정도를 줄임
+            } else if(this.getText().equals("전송")){
+                graphics.fillRoundRect(0, 0, width, height, 20, 20); // 나가기 버튼만 둥근 정도를 줄임
             } else{
                 graphics.fillRoundRect(0, 0, width, height, 50, 50); // 다른 버튼들은 기존 둥근 정도 유지
             }
@@ -208,9 +210,17 @@ public class Mainpage {
                 if (chatInstance == null || chatInstance.isSocketClosed()) {
                     String username = null;
 
+                    // Create custom options for the dialog
+                    String[] options = {"Custom OK", "Custom Cancel"};
+
                     // 사용자에게 이름 입력 받기
                     while (true) {
-                        username = JOptionPane.showInputDialog("사용자 이름을 입력하세요:");
+                        username = (String) JOptionPane.showInputDialog(
+                                null,
+                                "사용자 이름을 입력하세요.",
+                                "사용자 이름 입력",
+                                JOptionPane.PLAIN_MESSAGE
+                        );
                         if (username == null) {
                             // 사용자가 취소 버튼을 눌렀을 경우
                             break;
@@ -240,8 +250,12 @@ public class Mainpage {
                             worker.execute();  // SwingWorker 실행
                             break;
                         } else {
-                            JOptionPane.showMessageDialog(null, "사용자 이름을 입력하세요.");
-                        }
+                            JOptionPane.showInputDialog(
+                                    null,
+                                    "사용자 이름을 입력하세요.",
+                                    "사용자 이름 입력",
+                                    JOptionPane.PLAIN_MESSAGE
+                            );                        }
                     }
                 } else {
                     chatInstance.setVisible(true);

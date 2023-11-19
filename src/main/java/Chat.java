@@ -1,4 +1,5 @@
 import  javax.swing.*;
+import javax.swing.border.LineBorder;
 import javax.swing.text.DefaultCaret;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -15,10 +16,14 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.HashMap;
+import java.util.Map;
 
 import java.net.Socket;
 
 public class Chat extends JFrame {
+    private Map<String, String> languageCodeMap;
+
     private JTextArea chatArea;
     private JTextField messageField;
     private JButton sendButton;
@@ -38,6 +43,8 @@ public class Chat extends JFrame {
         //@@ SocketTranslator\\src\\main\\resources\\CATPAGO_LOGO
         setIconImage(img);
         //각 프로그램별 로고이미지 부분
+
+
         this.nTranslator = new NTranslator();
         createChatUI();
         addWindowListener(new CustomWindowAdapter());
@@ -65,17 +72,30 @@ public class Chat extends JFrame {
 
     public void createChatUI() { // GUI부분@@@@
         setTitle("CATPAGO - 언어 장벽 없이 대화하는 세상을 꿈꿉니다. ");
+        ImageIcon imageIcon = new ImageIcon("src\\main\\resources\\bg_NT.png"); // Replace with your image path
+        JLabel imageLabel = new JLabel("",imageIcon,JLabel.CENTER);
+        imageLabel.setBounds(0, 0, imageIcon.getIconWidth(), imageIcon.getIconHeight()); // Set the bounds according to the image size
+        ImageIcon imageIcon2 = new ImageIcon("src\\main\\resources\\bg_CHAT.png"); // Replace with your image path
+        JLabel imageLabel2 = new JLabel("",imageIcon2,JLabel.CENTER);
+        imageLabel2.setBounds(798, 97, imageIcon2.getIconWidth(), imageIcon2.getIconHeight()); // Set the bounds according to the image size
+        ImageIcon imageIcon3 = new ImageIcon("src\\main\\resources\\banner_CHAT.png"); // Replace with your image path
+        JLabel imageLabel3 = new JLabel("",imageIcon3,JLabel.CENTER);
+        imageLabel3.setBounds(0, 0, imageIcon3.getIconWidth(), imageIcon3.getIconHeight()); // Set the bounds according to the image size
 
         chatArea = new JTextArea(); // 대화 내용이 보이는 박스
         chatArea.setEditable(false); // 대화 박스에 임의로 수정 불가능하게 만들기
+        chatArea.setBorder(new LineBorder(new Color(0,0,0), 2)); // Set a black border
+        chatArea.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
+
 
         // JScrollPane를 사용하여 chatArea를 감싸 스크롤 추가
         JScrollPane chatScrollPane = new JScrollPane(chatArea);
         chatScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         messageField = new JTextField(); // 메시지를 입력할 수 있는 박스
+        messageField.setBorder(new LineBorder(new Color(0,0,0), 1)); // Set a black border
 
-        sendButton = new JButton("전송"); // 메시지를 전송하는 버튼
+        sendButton = new Mainpage.RoundedButton("전송", new Color(0,169,255));
         sendButton.addActionListener(new SendButtonListener());
 
         messageField.addActionListener(new ActionListener() { //엔터키로 메시지를 보낼 수 있도록
@@ -89,25 +109,29 @@ public class Chat extends JFrame {
         // 대화 참가자 목록이 나타나는 박스
 
         // 번역할 언어 선택 콤보박스
-        languageComboBox = new JComboBox<>(new String[]{"ko", "en", "ja", "zh-CN", "zh-TW", "vi", "id", "th", "de", "ru", "es", "it", "fr"});
-        languageComboBox.setBounds(220, 220, 90, 20);
+        languageComboBox = new JComboBox<>(new String[]{"한국어로", "영어로", "일본어로", "중국어(간체)로", "중국어(번체)로", "베트남어로", "인도네시아어로", "태국어로", "독일어로", "러시아어로", "스페인어로", "이탈리아어로", "프랑스어로"});
+        languageComboBox.setBounds(580, 510, 110, 20);
 
         // 번역 체크박스
         TranslationCheckbox = new JCheckBox("실시간 번역");
-        TranslationCheckbox.setBounds(320, 220, 100, 20);
+        TranslationCheckbox.setBounds(692, 509, 88, 20);
 
-        exitButton = new JButton("나가기"); // 채팅방을 종료하는 나가기 버튼
+        exitButton = new Mainpage.RoundedButton("나가기",new Color(155,164,181));
         exitButton.addActionListener(new ExitButtonListener());
 
         setLayout(null);
         setResizable(false); // 윈도우의 크기 조정을 불가능하게 한다.
         setLocationRelativeTo(null); // 실행시 화면 중앙에서 실행되는 코드.
+        createLanguageCodeMap(); // 이 메서드를 호출해 languageCodeMap을 초기화해요.
 
-        chatScrollPane.setBounds(10, 10, 300, 200);
-        messageField.setBounds(10, 250, 200, 30);
-        sendButton.setBounds(220, 250, 90, 30);
-        userList.setBounds(320, 10, 100, 200);
-        exitButton.setBounds(320, 250, 100, 30);
+
+        chatScrollPane.setBounds(50, 100, 730, 397);
+        chatScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        chatScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        messageField.setBounds(50, 505, 425, 30);
+        sendButton.setBounds(482, 505, 90, 30);
+        userList.setBounds(801, 100, 100, 397);
+        exitButton.setBounds(801, 505, 100, 30);
 
 
         add(chatScrollPane); // 수정된 chatScrollPane를 추가
@@ -118,9 +142,34 @@ public class Chat extends JFrame {
         add(languageComboBox);
         add(TranslationCheckbox);
 
-        setSize(450, 330);
+        add(imageLabel2);
+        add(imageLabel3);
+        add(imageLabel);
+
+
+        setSize(965, 590);
         setVisible(true);
         messageField.requestFocus(); // 실행시 메시지 입력창에 커서가 위치하도록
+    }
+
+    public void createLanguageCodeMap() {
+        languageCodeMap = new HashMap<>();
+        languageCodeMap.put("한국어로", "ko");
+        languageCodeMap.put("영어로", "en");
+        languageCodeMap.put("일본어로", "ja");
+        languageCodeMap.put("중국어(간체)로", "zh-CN");
+        languageCodeMap.put("중국어(번체)로", "zh-TW");
+        languageCodeMap.put("베트남어로", "vi");
+        languageCodeMap.put("인도네시아어로", "id");
+        languageCodeMap.put("태국어로", "th");
+        languageCodeMap.put("독일어로", "de");
+        languageCodeMap.put("러시아어로", "ru");
+        languageCodeMap.put("스페인어로", "es");
+        languageCodeMap.put("이탈리아어로", "it");
+        languageCodeMap.put("프랑스어로", "fr");
+
+        System.out.println(languageCodeMap);
+
     }
 
     public void sendUsername() {
@@ -179,7 +228,8 @@ public class Chat extends JFrame {
                         if(TranslationCheckbox.isSelected()) {
                             String text = message.substring(message.indexOf(":") + 2);
                             String sourceLanguage = nTranslator.detectLanguage(text);
-                            String targetLanguage = (String) languageComboBox.getSelectedItem();
+                            String targetLanguageDisplay = (String) languageComboBox.getSelectedItem();
+                            String targetLanguage = languageCodeMap.get(targetLanguageDisplay);
                             JSONObject json = new JSONObject();
                             String sendUsername = message.substring(0, message.indexOf(":"));
                             json.put("Username", sendUsername);
