@@ -41,7 +41,23 @@ public class Server {
                         OutputStream out = s.getOutputStream();
                         clientOutputStreams.add(out);
 
-                        byte[] buffer = new byte[2 * 1024 * 1024];
+                        byte[] connectBuffer = new byte[1024];
+                        int connectBytesReceived = in.read(connectBuffer);
+                        String connectMessage = new String(connectBuffer, 0, connectBytesReceived, StandardCharsets.UTF_8);
+
+                        if (connectMessage.equals("CONNECT:")) {
+                            // 클라이언트가 CONNECT 메시지를 보냈을 때의 처리
+                            System.out.println("클라이언트가 연결되었습니다.");
+                            out.write("CONNECTED".getBytes(StandardCharsets.UTF_8));
+                            // 이후에 클라이언트와의 통신 계속 진행
+                        } else {
+                            // 다른 메시지가 오면 연결 거부 처리 등을 수행
+                            System.out.println("올바르지 않은 연결 요청입니다.");
+                            out.write("CONN REF".getBytes(StandardCharsets.UTF_8));
+                            s.close(); // 연결 종료
+                        }
+
+                        byte[] buffer = new byte[2 * 1024 * 1024]; //2메가
                         int bytesReceived;
                         while ((bytesReceived = in.read(buffer)) != -1) {
                             String clientMessage = new String(buffer, 0, bytesReceived, StandardCharsets.UTF_8);
