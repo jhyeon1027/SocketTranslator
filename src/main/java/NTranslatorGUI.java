@@ -198,7 +198,12 @@ public class NTranslatorGUI extends JFrame{
                 byte[] buffer = new byte[1024];
                 int bytesReceived = in.read(buffer);
                 String serverMessage = new String(buffer, 0, bytesReceived, StandardCharsets.UTF_8);
-                outputArea.setText(serverMessage);
+                if(serverMessage.startsWith("TRANSLATED:")){
+                    serverMessage = serverMessage.substring("TranslatedText:".length());
+                    outputArea.setText(serverMessage); //번역결과를 출력창에 표시.
+                }
+                else outputArea.setText("번역 실패"); //Translate 실패시 출력창에 표시.
+
             } catch (IOException ex) {
                 ex.printStackTrace();
             }

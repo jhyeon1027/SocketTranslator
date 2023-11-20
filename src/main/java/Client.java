@@ -39,7 +39,7 @@ public class Client {
             String responseMessage = new String(responseBuffer, 0, bytesRead, StandardCharsets.UTF_8);
 
 
-            if (responseMessage.equals("CONNECTED")) {
+            if (responseMessage.equals("CONNECTED:")) {
                 // 연결 성공일 경우
                 System.out.println("연결 성공!");
 

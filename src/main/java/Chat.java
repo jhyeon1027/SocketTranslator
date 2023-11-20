@@ -185,11 +185,12 @@ public class Chat extends JFrame {
                 // 클라이언트가 메시지를 보낼 때 사용자 이름을 붙여서 서버로 전송
                 String inputMessage = messageField.getText().trim();  // 메시지 양 끝의 공백을 제거
                 if (!inputMessage.isEmpty()) {  // 공백을 제거한 후 메시지가 비어있지 않은 경우에만 전송
-                    String message = username + ": " + inputMessage;
+                    String message = "CHAT:"+username + ": " + inputMessage;
                     byte[] messageBytes = message.getBytes(StandardCharsets.UTF_8);
                     client.sendToServer(messageBytes);
 
                     // 채팅창에 내가 보낸 메시지 추가
+                    message=message.substring("CHAT:".length());
                     chatArea.append(message + "\n");
                 }
             } catch (Exception ex) {
@@ -224,25 +225,30 @@ public class Chat extends JFrame {
                     } else if (message.startsWith("USERLIST:")) {
                         String[] users = message.substring("USERLIST:".length()).split(",");
                         updateUserList(users);
-                    } else if (!message.startsWith(username + ": ")) {
-                        if(TranslationCheckbox.isSelected()) {
-                            String text = message.substring(message.indexOf(":") + 2);
-                            String sourceLanguage = nTranslator.detectLanguage(text);
-                            String targetLanguageDisplay = (String) languageComboBox.getSelectedItem();
-                            String targetLanguage = languageCodeMap.get(targetLanguageDisplay);
-                            JSONObject json = new JSONObject();
-                            String sendUsername = message.substring(0, message.indexOf(":"));
-                            json.put("Username", sendUsername);
-                            json.put("inputText", text);
-                            json.put("sourceLanguage", sourceLanguage);
-                            json.put("targetLanguage", targetLanguage);
-                            String messageR = "LiveTRANSLATE:" + json.toString();
-                            byte[] messageBytes = messageR.getBytes(StandardCharsets.UTF_8);
-                            client.sendToServer(messageBytes);
+                    } else if (message.startsWith("CHAT:")) {
+                         message= message.substring("CHAT:".length());
+                         System.out.println("제거된메시지:"+message);
+                        if(!message.startsWith(username + ": ")){
+                            if(TranslationCheckbox.isSelected()) {
+                                String text = message.substring(message.indexOf(":") + 2);
+                                String sourceLanguage = nTranslator.detectLanguage(text);
+                                String targetLanguageDisplay = (String) languageComboBox.getSelectedItem();
+                                String targetLanguage = languageCodeMap.get(targetLanguageDisplay);
+                                JSONObject json = new JSONObject();
+                                String sendUsername = message.substring(0, message.indexOf(":"));
+                                json.put("Username", sendUsername);
+                                json.put("inputText", text);
+                                json.put("sourceLanguage", sourceLanguage);
+                                json.put("targetLanguage", targetLanguage);
+                                String messageR = "LiveTRANSLATE:" + json.toString();
+                                byte[] messageBytes = messageR.getBytes(StandardCharsets.UTF_8);
+                                client.sendToServer(messageBytes);
 
-                        } else{
-                            chatArea.append(message + "\n");
+                            } else{
+                                chatArea.append(message + "\n");
+                            }
                         }
+
                     }
                     // 스크롤을 항상 아래로 이동
                     chatArea.setCaretPosition(chatArea.getDocument().getLength());

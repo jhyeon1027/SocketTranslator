@@ -177,7 +177,7 @@ public class NTranslator extends JFrame {
 
             return translatedText;
         } catch (Exception e) {
-            return "번역 실패: " + e.getMessage();
+            return "TRANS FAIL:" + e.getMessage();
         }
     }
 

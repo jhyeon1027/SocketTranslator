@@ -255,10 +255,11 @@ public class ImageTranslatorGUI extends JFrame {
                     int bytesReceived = in.read(buffer);
                     String serverMessage = new String(buffer, 0, bytesReceived, StandardCharsets.UTF_8);
                     // 서버로부터 받은 텍스트를 JSON 객체로 변환합니다.
-                    if (serverMessage.equals("IMAGETRANSLATE:FAIL")){
+                    if (serverMessage.equals("IMAGETRANS FAIL:")){
                         JOptionPane.showMessageDialog(null, "오류가 발생했습니다.", "오류", JOptionPane.ERROR_MESSAGE);
                         return;
                     }
+                    serverMessage = serverMessage.substring(16);
                     JSONParser parser = new JSONParser();
                     JSONObject jsonObject = (JSONObject) parser.parse(serverMessage);
                     // JSON 객체에서 번역된 텍스트를 추출합니다.

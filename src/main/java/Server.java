@@ -48,12 +48,12 @@ public class Server {
                         if (connectMessage.equals("CONNECT:")) {
                             // 클라이언트가 CONNECT 메시지를 보냈을 때의 처리
                             System.out.println("클라이언트가 연결되었습니다.");
-                            out.write("CONNECTED".getBytes(StandardCharsets.UTF_8));
+                            out.write("CONNECTED:".getBytes(StandardCharsets.UTF_8));
                             // 이후에 클라이언트와의 통신 계속 진행
                         } else {
                             // 다른 메시지가 오면 연결 거부 처리 등을 수행
                             System.out.println("올바르지 않은 연결 요청입니다.");
-                            out.write("CONN REF".getBytes(StandardCharsets.UTF_8));
+                            out.write("CONN REF:".getBytes(StandardCharsets.UTF_8));
                             s.close(); // 연결 종료
                         }
 
@@ -111,9 +111,16 @@ public class Server {
                                     // 이 위에까지가 번역정보. 이 아래부터는 번역기능 구현
                                     String translatedText = translator.translateText(inputText, sourceLanguage, targetLanguage);
                                     // 번역 결과를 클라이언트에게 전송
-                                    String responseMessage = /*"TRANSLATE:" +일단없앰*/translatedText;
+                                    String responseMessage;
+                                    if (translatedText.startsWith("TRANS FAIL:")){
+                                        responseMessage = "TRANS FAIL:";
+                                    }
+                                    else{
+                                        responseMessage = "TRANSLATED:" +translatedText;
+                                    }
                                     byte[] responseMessageBytes = responseMessage.getBytes(StandardCharsets.UTF_8);
                                     out.write(responseMessageBytes);
+
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
@@ -131,8 +138,9 @@ public class Server {
                                     String translatedText = imageTranslator.translateImage(imageFile, sourceLanguage, targetLanguage);
                                     String responseMessage = translatedText;
                                     if (Objects.equals(responseMessage, "null")){ //만약 Null값이 return된다면..
-                                        responseMessage = "IMAGETRANSLATE:FAIL";
+                                        responseMessage = "IMAGETRANS FAIL:";
                                     }
+                                    else responseMessage = "IMAGETRANSLATED:"+responseMessage;
                                     byte[] responseMessageBytes = responseMessage.getBytes(StandardCharsets.UTF_8);
                                     out.write(responseMessageBytes);
                                 } catch (ParseException e) {
@@ -150,9 +158,9 @@ public class Server {
                                     String responseMessage;
                                     responseMessage=pdftoImage.translateImage(base64File, sourceLanguage, targetLanguage);
                                     if(responseMessage=="Success")
-                                        responseMessage="PDFTRANSLATE:SUCCESS";
+                                        responseMessage="PDFTRANSLATED:";
                                     else if (responseMessage=="Fail")
-                                        responseMessage="PDFTRANSLATE:FAIL";
+                                        responseMessage="PDFTRANS FAIL:";
                                     byte[] responseMessageBytes = responseMessage.getBytes(StandardCharsets.UTF_8);
                                     out.write(responseMessageBytes);
                                 } catch (ParseException e) {
@@ -178,6 +186,8 @@ public class Server {
                                     e.printStackTrace();
                                 }
 
+                            }else if(clientMessage.startsWith("CHAT:")){
+                                tellEveryone(clientMessage, out);
                             }else {
                                 tellEveryone(clientMessage, out);
                             }
