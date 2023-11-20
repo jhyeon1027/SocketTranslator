@@ -109,14 +109,14 @@ public class Mainpage {
         JFrame f = new JFrame("CATPAGO - 언어 장벽 없이 대화하는 세상을 꿈꿉니다. "); // JFrame 객체를 생성한다.
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         //이미지는 모두 상대경로로 지정
-        Image img = toolkit.getImage("src\\main\\resources\\CATPAGO_LOGO.png");
+        Image img = toolkit.getImage("src/main/resources/CATPAGO_LOGO.png");
         //@@ SocketTranslator\\src\\main\\resources\\CATPAGO_LOGO
         f.setIconImage(img);
 
-        ImageIcon imageIcon = new ImageIcon("src\\main\\resources\\CATPAGO_2.png"); // Replace with your image path
+        ImageIcon imageIcon = new ImageIcon("src/main/resources/CATPAGO_2.png"); // Replace with your image path
         //@@SocketTranslator\\src\\main\\resources\\CATPAGO_2
 
-        ImageIcon imageIcon2 = new ImageIcon("src\\main\\resources\\bg.png");
+        ImageIcon imageIcon2 = new ImageIcon("src/main/resources/bg.png");
         //@@SocketTranslator\\src\\main\\resources\\bg
 
         // Create a JLabel with the imageIcon

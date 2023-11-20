@@ -39,8 +39,8 @@ public class Chat extends JFrame {
 
     public Chat() {
         Toolkit toolkit = Toolkit.getDefaultToolkit();
-        Image img = toolkit.getImage("src\\main\\resources\\CATPAGO_LOGO.png");
-        //@@ SocketTranslator\\src\\main\\resources\\CATPAGO_LOGO
+        Image img = toolkit.getImage("src/main/resources/CATPAGO_LOGO.png");
+        //@@ SocketTranslator/src/main/resources/CATPAGO_LOGO
         setIconImage(img);
         //각 프로그램별 로고이미지 부분
 
@@ -72,13 +72,13 @@ public class Chat extends JFrame {
 
     public void createChatUI() { // GUI부분@@@@
         setTitle("CATPAGO - 언어 장벽 없이 대화하는 세상을 꿈꿉니다. ");
-        ImageIcon imageIcon = new ImageIcon("src\\main\\resources\\bg_NT.png"); // Replace with your image path
+        ImageIcon imageIcon = new ImageIcon("src/main/resources/bg_NT.png"); // Replace with your image path
         JLabel imageLabel = new JLabel("",imageIcon,JLabel.CENTER);
         imageLabel.setBounds(0, 0, imageIcon.getIconWidth(), imageIcon.getIconHeight()); // Set the bounds according to the image size
-        ImageIcon imageIcon2 = new ImageIcon("src\\main\\resources\\bg_CHAT.png"); // Replace with your image path
+        ImageIcon imageIcon2 = new ImageIcon("src/main/resources/bg_CHAT.png"); // Replace with your image path
         JLabel imageLabel2 = new JLabel("",imageIcon2,JLabel.CENTER);
         imageLabel2.setBounds(798, 97, imageIcon2.getIconWidth(), imageIcon2.getIconHeight()); // Set the bounds according to the image size
-        ImageIcon imageIcon3 = new ImageIcon("src\\main\\resources\\banner_CHAT.png"); // Replace with your image path
+        ImageIcon imageIcon3 = new ImageIcon("src/main/resources/banner_CHAT.png"); // Replace with your image path
         JLabel imageLabel3 = new JLabel("",imageIcon3,JLabel.CENTER);
         imageLabel3.setBounds(0, 0, imageIcon3.getIconWidth(), imageIcon3.getIconHeight()); // Set the bounds according to the image size
 

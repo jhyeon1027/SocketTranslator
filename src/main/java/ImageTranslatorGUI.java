@@ -58,8 +58,8 @@ public class ImageTranslatorGUI extends JFrame {
 
     public ImageTranslatorGUI(ImageTranslator imageTranslator, Client client){
         Toolkit toolkit = Toolkit.getDefaultToolkit();
-        Image img = toolkit.getImage("src\\main\\resources\\CATPAGO_LOGO.png");
-        //@@ SocketTranslator\\src\\main\\resources\\CATPAGO_LOGO
+        Image img = toolkit.getImage("src/main/resources/CATPAGO_LOGO.png");
+        //@@ SocketTranslator/src/main/resources/CATPAGO_LOGO
         setIconImage(img);
         //각 프로그램별 로고이미지 부분
 
@@ -90,14 +90,14 @@ public class ImageTranslatorGUI extends JFrame {
     }
 
     public void createImageTranslatorGUI(){
-        ImageIcon imageIcon = new ImageIcon("src\\main\\resources\\bg_NT.png"); // Replace with your image path
+        ImageIcon imageIcon = new ImageIcon("src/main/resources/bg_NT.png"); // Replace with your image path
         JLabel imageLabel = new JLabel("",imageIcon,JLabel.CENTER);
         imageLabel.setBounds(0, 0, imageIcon.getIconWidth(), imageIcon.getIconHeight()); // Set the bounds according to the image size
-        ImageIcon imageIcon2 = new ImageIcon("src\\main\\resources\\arrow.png"); // Replace with your image path
+        ImageIcon imageIcon2 = new ImageIcon("src/main/resources/arrow.png"); // Replace with your image path
         JLabel imageLabel2 = new JLabel("",imageIcon2,JLabel.CENTER);
         imageLabel2.setBounds(453, 270, imageIcon2.getIconWidth(), imageIcon2.getIconHeight()); // Set the bounds according to the image size
         add(imageLabel2);
-        ImageIcon imageIcon3 = new ImageIcon("src\\main\\resources\\banner_IMAGE.png"); // Replace with your image path
+        ImageIcon imageIcon3 = new ImageIcon("src/main/resources/banner_IMAGE.png"); // Replace with your image path
         JLabel imageLabel3 = new JLabel("",imageIcon3,JLabel.CENTER);
         imageLabel3.setBounds(0, 0, imageIcon3.getIconWidth(), imageIcon3.getIconHeight()); // Set the bounds according to the image size
         add(imageLabel3);

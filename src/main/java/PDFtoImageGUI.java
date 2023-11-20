@@ -51,22 +51,22 @@ public class PDFtoImageGUI extends JFrame {
 
     public void createPDFtoImageGUI(){
         Toolkit toolkit = Toolkit.getDefaultToolkit();
-        Image img = toolkit.getImage("src\\main\\resources\\CATPAGO_LOGO.png");
-        //@@ SocketTranslator\\src\\main\\resources\\CATPAGO_LOGO
+        Image img = toolkit.getImage("src/main/resources/CATPAGO_LOGO.png");
+        //@@ SocketTranslator/src/main/resources/CATPAGO_LOGO
         setIconImage(img);
         //각 프로그램별 로고이미지 부분
 
-        ImageIcon imageIcon = new ImageIcon("src\\main\\resources\\bg_NT.png"); // Replace with your image path
+        ImageIcon imageIcon = new ImageIcon("src/main/resources/bg_NT.png"); // Replace with your image path
         JLabel imageLabel = new JLabel("",imageIcon,JLabel.CENTER);
         imageLabel.setBounds(0, 0, imageIcon.getIconWidth(), imageIcon.getIconHeight()); // Set the bounds according to the image size
-        ImageIcon imageIcon3 = new ImageIcon("src\\main\\resources\\banner_PDF.png"); // Replace with your image path
+        ImageIcon imageIcon3 = new ImageIcon("src/main/resources/banner_PDF.png"); // Replace with your image path
         JLabel imageLabel3 = new JLabel("",imageIcon3,JLabel.CENTER);
         imageLabel3.setBounds(0, 0, imageIcon3.getIconWidth(), imageIcon3.getIconHeight()); // Set the bounds according to the image size
         add(imageLabel3);
-        ImageIcon imageIcon4 = new ImageIcon("src\\main\\resources\\bg_PDF.png"); // Replace with your image path
+        ImageIcon imageIcon4 = new ImageIcon("src/main/resources/bg_PDF.png"); // Replace with your image path
         JLabel imageLabel4 = new JLabel("",imageIcon4,JLabel.CENTER);
         imageLabel4.setBounds(50, 175, imageIcon4.getIconWidth(), imageIcon4.getIconHeight()); // Set the bounds according to the image size
-        ImageIcon imageIcon5 = new ImageIcon("src\\main\\resources\\pdfs.png"); // Replace with your image path
+        ImageIcon imageIcon5 = new ImageIcon("src/main/resources/pdfs.png"); // Replace with your image path
         JLabel imageLabel5 = new JLabel("",imageIcon5,JLabel.CENTER);
         imageLabel5.setBounds(205, 190, imageIcon5.getIconWidth(), imageIcon5.getIconHeight()); // Set the bounds according to the image size
         add(imageLabel5);
