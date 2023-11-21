@@ -2,12 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.*;
-import java.net.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
-import static javax.swing.SwingConstants.CENTER;
 
 public class Mainpage {
     private static Chat chatInstance; //Chat 클래스의 인스턴스를 저장하는 필드
