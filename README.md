@@ -8,4 +8,4 @@ CATPAGO는 TCP/IP 소켓 프로그래밍을 기반으로 한 번역 및 실시�
 ## 팀원 소개
 
 ## 프로젝트 소개
-
+<div align="center"> <img src="https://github.com/user-attachments/assets/19d0fdaa-471e-46e1-b01a-2939d11b4e77" width="800" height="500"/> </div>
